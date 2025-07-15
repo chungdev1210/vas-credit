@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+@use './tailwind.css';
+@use './assets/layout/layout.scss';
+@use 'primeicons/primeicons.css';
+@use './assets/demo/demo.scss';
+// @import "bootstrap/scss/bootstrap";
+
+.dialog-custom {
+    .p-dialog-mask {
+        align-items: start !important;
+        .p-dialog.p-component {
+            margin-top: 60px !important;
+        }
+    }
+}
+#startTime, #endTime {
+    display: block !important;
+    .p-datepicker.p-component {
+        width: 100% !important;
+    }
+}
+
+#fileUpload .p-fileupload.p-fileupload-basic {
+    justify-content: unset !important;
+}

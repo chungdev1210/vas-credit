@@ -1,0 +1,138 @@
+<div class="card">
+    <div class="flex justify-between mb-6">
+        <div class="font-bold text-2xl">Campaign Content Page</div>
+        <div class="flex">
+            <p-button icon="pi pi-plus" severity="primary" class="mr-4" (click)="open()" />
+            <p-button icon="pi pi-download" severity="primary" class="mr-4" />
+            <p-iconfield iconPosition="left">
+                <input pInputText type="text" placeholder="Search" />
+                <p-inputicon class="pi pi-search" />
+            </p-iconfield>
+        </div>
+    </div>
+    <p-table #dt1 [value]="compaignContents" dataKey="id" [rows]="5" [rowsPerPageOptions]="[5, 10, 25, 50]"
+        [loading]="loading" [rowHover]="true" [showGridlines]="true" [paginator]="true" responsiveLayout="scroll">
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 12rem">Campaign</th>
+                <th style="min-width: 12rem">Partner</th>
+                <th style="min-width: 12rem">Content</th>
+                <th style="min-width: 12rem">Approve status</th>
+                <th style="min-width: 12rem">Approve</th>
+                <th style="width: 200px">Action</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-campaign>
+            <tr>
+                <td>{{ campaign.campaignName }}</td>
+                <td>{{ campaign.partnerName }}</td>
+                <td>{{ campaign.content }}</td>
+                <td>{{ campaign.status === 'DRAFT' ? 'false' : 'true' }}</td>
+                <td>{{ campaign.phoneNumber }}</td>
+                <td style="text-align: center;">
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"
+                        (click)="getCampaignContentForEdit(campaign.id)" />
+                    <p-button icon="pi pi-trash" severity="danger" class="mr-2" [rounded]="true" [outlined]="true"
+                        (click)="openDelete(campaign.id)" />
+                    <p-button icon="pi pi-shield" severity="help" [rounded]="true" [outlined]="true"
+                        (click)="openApprove(campaign.id)" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-dialog [header]="isEdit ? 'Edit campaign content' : 'Create new campaign content'" [(visible)]="display"
+        [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '30vw' }" [modal]="true" class="dialog-custom">
+        <form class="grid gap-4">
+            <div class="grid gap-4">
+                <div>
+                    <label for="campaignId" class="block text-sm font-medium text-gray-700 mb-1">Campaign</label>
+                    <p-dropdown id="campaignId" [options]="campaigns" optionLabel="name" optionValue="id" class="w-full"
+                        [class.ng-dirty]="fieldErrors.campaignId" placeholder="Select campaign"
+                        [class.ng-invalid]="fieldErrors.campaignId" name="campaignId"
+                        [(ngModel)]="campaignContentBody.campaignId" (onChange)="clearError('campaignId')">
+                    </p-dropdown>
+                </div>
+                <div>
+                    <label for="partnerId" class="block text-sm font-medium text-gray-700 mb-1">Partner</label>
+                    <p-dropdown [(ngModel)]="campaignContentBody.partnerId" [options]="partners" optionLabel="name"
+                        optionValue="id" placeholder="Select partner" name="partnerId" class="w-full"
+                        [class.ng-dirty]="fieldErrors.partnerId" [class.ng-invalid]="fieldErrors.partnerId"
+                        (onChange)="clearError('partnerId')" />
+                </div>
+                <div>
+                    <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                    <p-dropdown id="type" [options]="typeOptions" optionLabel="label" optionValue="value" class="w-full"
+                        [class.ng-dirty]="fieldErrors.type" [class.ng-invalid]="fieldErrors.type" name="type"
+                        [(ngModel)]="campaignContentBody.type" (onChange)="clearError('type')">
+                    </p-dropdown>
+                </div>
+                <div>
+                    <label for="customerAgree" class="block text-sm font-medium text-gray-700 mb-1">Customer
+                        agree</label>
+                    <p-dropdown [(ngModel)]="campaignContentBody.customerAgree" [options]="customerAgreeOptions"
+                        optionLabel="label" optionValue="value" placeholder="Select partner" name="customerAgree"
+                        class="w-full" [class.ng-dirty]="fieldErrors.customerAgree"
+                        [class.ng-invalid]="fieldErrors.customerAgree" (onChange)="clearError('customerAgree')" />
+                </div>
+                <div>
+                    <label for="volume" class="block text-sm font-medium text-gray-700 mb-1">Volume (%)</label>
+                    <p-inputNumber id="volume" class="w-full" [class.ng-dirty]="fieldErrors.volume"
+                        [class.ng-invalid]="fieldErrors.volume" mode="decimal" name="volume"
+                        [(ngModel)]="campaignContentBody.volume" (onInput)="clearError('volume')">
+                    </p-inputNumber>
+                </div>
+                <div>
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                    <textarea pTextarea placeholder="Write content..." [autoResize]="true" rows="3" cols="30"
+                        name="content" class="w-full" [class.ng-dirty]="fieldErrors.content"
+                        [class.ng-invalid]="fieldErrors.content" [(ngModel)]="campaignContentBody.content"
+                        (onInput)="clearError('content')"></textarea>
+                </div>
+            </div>
+        </form>
+
+        <ng-template #footer>
+            <p-button label="Cancel" severity="secondary" (click)="close()" />
+            <p-button label="Save" (click)="submitCreateCampaign()" />
+            <p-button icon="pi pi-spin pi-spinner" aria-label="Save" />
+        </ng-template>
+    </p-dialog>
+</div>
+<p-dialog header="Confirmation" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>Are you sure you want to proceed?</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="No" icon="pi pi-times" text severity="secondary" (click)="openDelete()" />
+        <p-button label="Yes" icon="pi pi-check" severity="success" outlined autofocus
+            (click)="deleteCampaignContent()" />
+    </ng-template>
+</p-dialog>
+<p-dialog header="Confirm approve" [(visible)]="displayApprove" [style]="{ width: '350px' }"
+    [breakpoints]="{ '960px': '75vw' }" [modal]="true" class="dialog-custom">
+    <div class="grid gap-4">
+        <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Enter your msisdn</label>
+            <input pInputText id="phone" type="text" class="w-full" [class.ng-dirty]="fieldErrors.phone"
+                [class.ng-invalid]="fieldErrors.phone" name="phone" [(ngModel)]="phone"
+                (keypress)="onlyNumbers($event)" />
+        </div>
+    </div>
+    <ng-template #footer>
+        <p-button label="No" icon="pi pi-times" text severity="secondary" (click)="openApprove()" />
+        <p-button label="Yes" icon="pi pi-check" severity="success" outlined autofocus (click)="approveConfirm()" />
+    </ng-template>
+</p-dialog>
+<p-toast />
