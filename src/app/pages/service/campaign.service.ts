@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class CampaignService {
     private baseUrl = 'http://10.101.52.40:9997';
-
     constructor(private http: HttpClient) {}
 
     private get<T>(url: string, params?: any): Observable<T> {
@@ -65,11 +64,11 @@ export class CampaignService {
     }
 
     getPartners(params?: any) {
-        return this.get('/partners', { ...params });
+        return this.get('/sms-command', { ...params });
     }
 
     createPartner(body: any) {
-        return this.post('/partners', body);
+        return this.post('/sms-command', body);
     }
 
     getCampaignContents(params?: any) {
@@ -81,15 +80,15 @@ export class CampaignService {
     }
 
     getCampaignContent(id: any) {
-        return this.get(`/campaign-contents/${id}`);
+        return this.get(`/sms-contents/${id}`);
     }
 
     editCampaignContent(id: any, body: any) {
-        return this.put(`/campaign-contents/${id}`, body);
+        return this.put(`/sms-contents/${id}`, body);
     }
 
     deleteCampaignContent(id: any) {
-        return this.delete(`/campaign-contents/${id}`);
+        return this.delete(`/sms-contents/${id}`);
     }
 
     getBlackList(params?: any) {

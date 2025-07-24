@@ -1,40 +1,107 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, tap, throwError } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
-    private baseUrl = 'https://your-api-domain.com/api';
+    private readonly API_BASE = '/admin';
+    private readonly AUTH_BASE = '/api-auth';
 
     constructor(
         private http: HttpClient,
         private messageService: MessageService
     ) {}
 
-    // GET request
-    get<T>(endpoint: string): Observable<T> {
-        return this.http.get<T>(`${this.baseUrl}${endpoint}`).pipe(catchError((error) => this.handleError(error)));
+    // GET request với params
+    get<T>(url: string, params?: any): Observable<T> {
+        return this.http
+            .get<T>(`${this.API_BASE}${url}`, {
+                params: params,
+                headers: this.createHeaders()
+            })
+            .pipe(catchError((error) => this.handleError(error)));
     }
 
-    // POST request
-    post<T>(endpoint: string, body: any): Observable<T> {
-        return this.http.post<T>(`${this.baseUrl}${endpoint}`, body).pipe(catchError((error) => this.handleError(error)));
+    // POST request với headers
+    post<T>(url: string, body?: any): Observable<T> {
+        return this.http
+            .post<T>(`${this.API_BASE}${url}`, body, {
+                headers: this.createHeaders()
+            })
+            .pipe(catchError((error) => this.handleError(error)));
     }
 
-    // PUT request
-    put<T>(endpoint: string, body: any): Observable<T> {
-        return this.http.put<T>(`${this.baseUrl}${endpoint}`, body).pipe(catchError((error) => this.handleError(error)));
+    // PUT request với headers
+    put<T>(url: string, body?: any): Observable<T> {
+        return this.http
+            .put<T>(`${this.API_BASE}${url}`, body, {
+                headers: this.createHeaders()
+            })
+            .pipe(catchError((error) => this.handleError(error)));
     }
 
     // DELETE request
-    delete<T>(endpoint: string): Observable<T> {
-        return this.http.delete<T>(`${this.baseUrl}${endpoint}`).pipe(catchError((error) => this.handleError(error)));
+    delete<T>(url: string): Observable<T> {
+        return this.http
+            .delete<T>(`${this.API_BASE}${url}`, {
+                headers: this.createHeaders()
+            })
+            .pipe(catchError((error) => this.handleError(error)));
     }
 
-    // Xử lý lỗi tập trung và hiển thị bằng PrimeNG Message
+    // === AUTH METHODS ===
+    // GET request cho auth endpoints
+    authGet<T>(url: string, params?: any): Observable<T> {
+        return this.http
+            .get<T>(`${this.AUTH_BASE}${url}`, {
+                params: params
+            })
+            .pipe(catchError((error) => this.handleError(error)));
+    }
+
+    // POST request cho auth endpoints (login, register, etc.)
+    authPost<T>(url: string, body?: any): Observable<T> {
+        return this.http
+            .post<T>(`${this.AUTH_BASE}${url}`, body, {
+                headers: this.createHeaders()
+            })
+            .pipe(catchError((error) => this.handleError(error)));
+    }
+
+    // PUT request cho auth endpoints
+    authPut<T>(url: string, body?: any): Observable<T> {
+        return this.http
+            .put<T>(`${this.AUTH_BASE}${url}`, body, {
+                headers: this.createHeaders()
+            })
+            .pipe(catchError((error) => this.handleError(error)));
+    }
+
+    // DELETE request cho auth endpoints
+    authDelete<T>(url: string): Observable<T> {
+        return this.http
+            .delete<T>(`${this.AUTH_BASE}${url}`, {
+                headers: this.createHeaders()
+            })
+            .pipe(catchError((error) => this.handleError(error)));
+    }
+
+    private createHeaders(): HttpHeaders {
+        return new HttpHeaders({
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        });
+    }
+
+    private createGetHeaders(): HttpHeaders {
+        return new HttpHeaders({
+            Accept: 'application/json'
+        });
+    }
+
     private handleError(error: any): Observable<never> {
         let errorMessage = 'Đã xảy ra lỗi!';
 

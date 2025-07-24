@@ -1,0 +1,18 @@
+{
+  "/api-auth/*": {
+    "target": "http://10.101.52.40:9996",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api-auth": ""
+    }
+  },
+  "/admin/**": {
+    "target": "http://10.101.52.40:9996",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+
+}

@@ -7,11 +7,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-login',
     standalone: true,
     imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
+    providers: [AuthService],
     template: `
         <app-floating-configurator />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
@@ -36,17 +39,26 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                     />
                                 </g>
                             </svg>
-                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
+                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to CMS!</div>
                             <span class="text-muted-color font-medium">Sign in to continue</span>
                         </div>
-
                         <div>
                             <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" [(ngModel)]="email" />
+                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" [class.ng-invalid]="fieldErrors.email" [(ngModel)]="email" [class.ng-dirty]="fieldErrors.email" name="email" />
 
                             <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                            <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
-
+                            <p-password
+                                id="password1"
+                                [(ngModel)]="password"
+                                placeholder="Password"
+                                [toggleMask]="true"
+                                styleClass="mb-4"
+                                [fluid]="true"
+                                [feedback]="false"
+                                [class.ng-invalid]="fieldErrors.password"
+                                [class.ng-dirty]="fieldErrors.password"
+                                name="password"
+                            ></p-password>
                             <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                                 <div class="flex items-center">
                                     <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
@@ -54,7 +66,15 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                 </div>
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full" routerLink="/"></p-button>
+                            <p-button
+                                [label]="isLoading ? 'Signing In...' : 'Sign In'"
+                                styleClass="w-full"
+                                (onClick)="login()"
+                                [loading]="isLoading"
+                                [disabled]="isLoading"
+                                icon="pi pi-user"
+                                [loadingIcon]="isLoading ? 'pi pi-spinner pi-spin' : ''"
+                            ></p-button>
                         </div>
                     </div>
                 </div>
@@ -63,9 +83,45 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
     `
 })
 export class Login {
-    email: string = '';
+    constructor(
+        private _authService: AuthService,
+        private router: Router
+    ) {
+        if (localStorage.getItem('info')) {
+            this.router.navigate(['/']);
+        }
+    }
 
-    password: string = '';
-
+    email: string | undefined;
+    password: string | undefined;
     checked: boolean = false;
+    fieldErrors: any = {};
+    isLoading: boolean = false;
+
+    login() {
+        this.fieldErrors = {};
+        if (!this.email || this.email.trim() === '') {
+            this.fieldErrors.email = true;
+        }
+        if (!this.password) {
+            this.fieldErrors.password = true;
+        }
+        if (Object.keys(this.fieldErrors).length > 0) {
+            return;
+        }
+        this.isLoading = true;
+        let loginData = {
+            userName: this.email,
+            password: this.password
+        };
+        this._authService.login(loginData).subscribe({
+            next: (response: any) => {
+                localStorage.setItem('info', JSON.stringify(response));
+                this.router.navigate(['/']);
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });
+    }
 }

@@ -1,15 +1,17 @@
 import { Routes } from '@angular/router';
 import { Documentation } from './documentation/documentation';
-import { CampaignComponent } from './campaign/campaign';
-import { CampaignContentComponent } from './campaign-content/campaign-content';
-import { PartnersComponent } from './partners/partners';
-import { BlackListComponent } from './blacklist/black-list';
+import { UssdManagementComponent } from './ussd-management/ussd-management';
+import { SmsContentComponent } from './sms-content/sms-content';
+import { SmsCommandComponent } from './sms-command/sms-command';
+import { OfferManagementComponent } from './offer-management/offer-management';
+import { SystemConfigsComponent } from './system-configs/system-configs';
 
 export default [
     { path: 'documentation', component: Documentation },
-    { path: 'campaign', component: CampaignComponent },
-    { path: 'campaign-content', component: CampaignContentComponent },
-    { path: 'partners', component: PartnersComponent },
-    { path: 'black-list', component: BlackListComponent },
+    { path: 'ussd-management', component: UssdManagementComponent },
+    { path: 'sms-content', component: SmsContentComponent },
+    { path: 'sms-command', component: SmsCommandComponent },
+    { path: 'offer-management', component: OfferManagementComponent },
+    { path: 'system-configs', component: SystemConfigsComponent },
     { path: '**', redirectTo: '/notfound' }
 ] as Routes;

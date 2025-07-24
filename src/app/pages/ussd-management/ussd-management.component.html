@@ -1,0 +1,559 @@
+<div class="space-y-6 p-4 md:p-6">
+    <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-800">Quản lý Menu USSD</h1>
+            <p class="text-slate-500">Trực quan hóa và chỉnh sửa các luồng USSD của bạn.</p>
+        </div>
+    </div>
+    <div class="p-3 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg text-md text-blue-800">
+        <strong>Lưu ý:</strong> Chỉ có thể sửa nội dung cấp 3 (gói cước). Cấp 1 và 2 là các menu điều hướng cố định của
+        hệ thống.
+    </div>
+
+    <div class="p-4 bg-white border border-slate-200 rounded-xl shadow-sm flex flex-wrap items-end gap-4">
+        <div class="relative flex-grow min-w-[250px]">
+            <label class="text-xs font-semibold text-slate-500">TÌM KIẾM</label>
+            <div class="relative mt-1">
+                <input pInputText type="text" placeholder="Tìm kiếm gói, nội dung, mã ServiceCode..." class="w-full" />
+            </div>
+        </div>
+        <div class="flex-grow min-w-[150px]">
+            <label class="text-xs font-semibold text-slate-500">LOẠI GÓI</label>
+            <p-dropdown styleClass="w-full mt-1" [options]="['Tất cả loại', 'Vay tiền', 'Data']"
+                placeholder="Tất cả loại"></p-dropdown>
+        </div>
+        <div class="flex-grow min-w-[150px]">
+            <label class="text-xs font-semibold text-slate-500">PHÂN KHÚC</label>
+            <p-dropdown styleClass="w-full mt-1" [options]="['Tất cả khách hàng', 'Khách thường', 'Khách VIP']"
+                placeholder="Tất cả khách hàng"></p-dropdown>
+        </div>
+        <div class="flex-grow min-w-[150px]">
+            <label class="text-xs font-semibold text-slate-500">TRẠNG THÁI</label>
+            <p-dropdown styleClass="w-full mt-1" [options]="['Tất cả', 'Đang hoạt động', 'Đã tắt']"
+                placeholder="Tất cả"></p-dropdown>
+        </div>
+    </div>
+
+    <div class="bg-white border border-slate-200/80 rounded-xl shadow-md mt-6 p-4 space-y-2">
+        <div class="flex items-center justify-between w-full p-2 rounded-lg">
+            <div class="flex items-center gap-4">
+                <div
+                    class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 ">
+                    <i class="pi pi-crown" style="font-size: 1rem; color: green"></i>
+                </div>
+                <div>
+                    <span class="font-semibold text-slate-800">Menu Chính - Karibu HALO SALIO</span>
+                    <div class="text-md text-slate-500">*149*14#</div>
+                </div>
+            </div>
+        </div>
+        <div class="pl-8 space-y-2 border-slate-200 ml-5">
+            <div class="flex items-center justify-between w-full p-2 rounded-lg hover:bg-slate-50 hover-icon">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                        1
+                    </div>
+                    <div>
+                        <span class="font-semibold text-slate-800 text-lg">{{package1.categoryName}}</span>
+                        <!-- <div class="text-sm text-slate-500">NAVIGATE_TO_BALANCE</div> -->
+                    </div>
+                </div>
+                <!-- <div class="flex items-center gap-1.5">
+                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
+                        <i class="pi pi-cog" style="color: #2563eb;"></i>
+                    </button>
+                </div> -->
+            </div>
+            <div class="customer-plans-container">
+                <p-accordion [multiple]="true">
+                    <p-accordionTab header="Khách hàng thường (Low ARPU)">
+                        <ng-template pTemplate="header">
+                            <div class="accordion-header">
+                                <i class="pi pi-users" style="margin-right: 8px;"></i>
+                                <span>Khách hàng thường (Low ARPU)</span>
+                            </div>
+                        </ng-template>
+                        <div class="plans-list">
+                            <div *ngFor="let plan of package1.arpuLowItems; let i = index" class="plan-item active">
+                                <div
+                                    class="flex items-center justify-between w-full p-4 rounded-lg hover:bg-slate-50 hover-icon">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                                            {{ plan.shortCode }}</div>
+                                        <div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-semibold text-slate-800">{{ plan.displayText }}</span>
+                                                <span
+                                                    class="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                                                    {{ plan.isActive ? 'Active' : null }}</span>
+                                            </div>
+                                            <div
+                                                class="text-sm text-slate-500 flex items-center gap-2 divide-x divide-slate-200 mt-1">
+                                                <span class="pr-2">
+                                                    {{ plan.serviceCode }} - {{ plan.displayText }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <button
+                                            class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200"
+                                            (click)="openUpdateUssd(plan)">
+                                            <i class="pi pi-cog" style="color: #2563eb;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+                </p-accordion>
+                <p-accordion [multiple]="true">
+                    <p-accordionTab header="Khách hàng VIP (High ARPU)">
+                        <ng-template pTemplate="header">
+                            <div class="accordion-header">
+                                <i class="pi pi-star" style="margin-right: 8px;"></i>
+                                <span>Khách hàng VIP (High ARPU)</span>
+                            </div>
+                        </ng-template>
+                        <div class="plans-list">
+                            <div *ngFor="let plan of package1.arpuHighItems; let i = index" class="plan-item active">
+                                <div
+                                    class="flex items-center justify-between w-full p-4 rounded-lg hover:bg-slate-50 hover-icon">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                                            {{ plan.shortCode }}</div>
+                                        <div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-semibold text-slate-800">{{ plan.displayText }}</span>
+                                                <span
+                                                    class="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                                                    {{ plan.isActive ? 'Active' : null }}</span>
+                                            </div>
+                                            <div
+                                                class="text-sm text-slate-500 flex items-center gap-2 divide-x divide-slate-200 mt-1">
+                                                <span class="pr-2">
+                                                    {{ plan.serviceCode }} - {{ plan.displayText }}
+                                                </span>
+                                                <!-- <span class="pl-2">💎 VIP (High ARPU)</span> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <button
+                                            class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200"
+                                            (click)="openUpdateUssd(plan)">
+                                            <i class="pi pi-cog" style="color: #2563eb;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+                </p-accordion>
+            </div>
+            <div class="flex items-center justify-between w-full p-2 rounded-lg hover:bg-slate-50 hover-icon">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                        2
+                    </div>
+                    <div>
+                        <span class="font-semibold text-slate-800 text-lg">{{package2.categoryName}}</span>
+                        <!-- <div class="text-sm text-slate-500">NAVIGATE_TO_BALANCE</div> -->
+                    </div>
+                </div>
+                <!-- <div class="flex items-center gap-1.5">
+                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
+                        <i class="pi pi-cog" style="color: #2563eb;"></i>
+                    </button>
+                </div> -->
+            </div>
+            <div class="customer-plans-container">
+                <p-accordion [multiple]="true">
+                    <p-accordionTab header="Khách hàng thường (Low ARPU)">
+                        <ng-template pTemplate="header">
+                            <div class="accordion-header">
+                                <i class="pi pi-users" style="margin-right: 8px;"></i>
+                                <span>Khách hàng thường (Low ARPU)</span>
+                            </div>
+                        </ng-template>
+                        <div class="plans-list">
+                            <div *ngFor="let plan of package2.arpuLowItems; let i = index" class="plan-item active">
+                                <div
+                                    class="flex items-center justify-between w-full p-4 rounded-lg hover:bg-slate-50 hover-icon">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                                            {{ plan.shortCode }}</div>
+                                        <div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-semibold text-slate-800">{{ plan.displayText }}</span>
+                                                <span
+                                                    class="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                                                    {{ plan.isActive ? 'Active' : null }}</span>
+                                            </div>
+                                            <div
+                                                class="text-sm text-slate-500 flex items-center gap-2 divide-x divide-slate-200 mt-1">
+                                                <span class="pr-2">
+                                                    {{ plan.serviceCode }} - {{ plan.displayText }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <button
+                                            class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200"
+                                            (click)="openUpdateUssd(plan)">
+                                            <i class="pi pi-cog" style="color: #2563eb;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+                </p-accordion>
+                <p-accordion [multiple]="true">
+                    <p-accordionTab header="Khách hàng VIP (High ARPU)">
+                        <ng-template pTemplate="header">
+                            <div class="accordion-header">
+                                <i class="pi pi-star" style="margin-right: 8px;"></i>
+                                <span>Khách hàng VIP (High ARPU)</span>
+                            </div>
+                        </ng-template>
+                        <div class="plans-list">
+                            <div *ngFor="let plan of package2.arpuHighItems; let i = index" class="plan-item active">
+                                <div
+                                    class="flex items-center justify-between w-full p-4 rounded-lg hover:bg-slate-50 hover-icon">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                                            {{ plan.shortCode }}</div>
+                                        <div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-semibold text-slate-800">{{ plan.displayText }}</span>
+                                                <span
+                                                    class="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                                                    {{ plan.isActive ? 'Active' : null }}</span>
+                                            </div>
+                                            <div
+                                                class="text-sm text-slate-500 flex items-center gap-2 divide-x divide-slate-200 mt-1">
+                                                <span class="pr-2">
+                                                    {{ plan.serviceCode }} - {{ plan.displayText }}
+                                                </span>
+                                                <!-- <span class="pl-2">💎 VIP (High ARPU)</span> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <button
+                                            class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200"
+                                            (click)="openUpdateUssd(plan)">
+                                            <i class="pi pi-cog" style="color: #2563eb;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+                </p-accordion>
+            </div>
+            <div class="flex items-center justify-between w-full p-2 rounded-lg hover:bg-slate-50 hover-icon">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                        3
+                    </div>
+                    <div>
+                        <span class="font-semibold text-slate-800 text-lg">{{package3.categoryName}}</span>
+                        <!-- <div class="text-sm text-slate-500">NAVIGATE_TO_BALANCE</div> -->
+                    </div>
+                </div>
+                <!-- <div class="flex items-center gap-1.5">
+                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
+                        <i class="pi pi-cog" style="color: #2563eb;"></i>
+                    </button>
+                </div> -->
+            </div>
+            <div class="customer-plans-container">
+                <p-accordion [multiple]="true">
+                    <p-accordionTab header="Khách hàng thường (Low ARPU)">
+                        <ng-template pTemplate="header">
+                            <div class="accordion-header">
+                                <i class="pi pi-users" style="margin-right: 8px;"></i>
+                                <span>Khách hàng thường (Low ARPU)</span>
+                            </div>
+                        </ng-template>
+                        <div class="plans-list">
+                            <div *ngFor="let plan of package3.arpuLowItems; let i = index" class="plan-item active">
+                                <div
+                                    class="flex items-center justify-between w-full p-4 rounded-lg hover:bg-slate-50 hover-icon">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                                            {{ plan.shortCode }}</div>
+                                        <div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-semibold text-slate-800">{{ plan.displayText }}</span>
+                                                <span
+                                                    class="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                                                    {{ plan.isActive ? 'Active' : null }}</span>
+                                            </div>
+                                            <div
+                                                class="text-sm text-slate-500 flex items-center gap-2 divide-x divide-slate-200 mt-1">
+                                                <span class="pr-2">
+                                                    {{ plan.serviceCode }} - {{ plan.displayText }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <button
+                                            class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200"
+                                            (click)="openUpdateUssd(plan)">
+                                            <i class="pi pi-cog" style="color: #2563eb;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+                </p-accordion>
+                <p-accordion [multiple]="true">
+                    <p-accordionTab header="Khách hàng VIP (High ARPU)">
+                        <ng-template pTemplate="header">
+                            <div class="accordion-header">
+                                <i class="pi pi-star" style="margin-right: 8px;"></i>
+                                <span>Khách hàng VIP (High ARPU)</span>
+                            </div>
+                        </ng-template>
+                        <div class="plans-list">
+                            <div *ngFor="let plan of package3.arpuHighItems; let i = index" class="plan-item active">
+                                <div
+                                    class="flex items-center justify-between w-full p-4 rounded-lg hover:bg-slate-50 hover-icon">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                                            {{ plan.shortCode }}</div>
+                                        <div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-semibold text-slate-800">{{ plan.displayText }}</span>
+                                                <span
+                                                    class="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                                                    {{ plan.isActive ? 'Active' : null }}</span>
+                                            </div>
+                                            <div
+                                                class="text-sm text-slate-500 flex items-center gap-2 divide-x divide-slate-200 mt-1">
+                                                <span class="pr-2">
+                                                    {{ plan.serviceCode }} - {{ plan.displayText }}
+                                                </span>
+                                                <!-- <span class="pl-2">💎 VIP (High ARPU)</span> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <button
+                                            class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200"
+                                            (click)="openUpdateUssd(plan)">
+                                            <i class="pi pi-cog" style="color: #2563eb;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+                </p-accordion>
+            </div>
+            <div class="flex items-center justify-between w-full p-2 rounded-lg hover:bg-slate-50 hover-icon">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                        4
+                    </div>
+                    <div>
+                        <span class="font-semibold text-slate-800 text-lg">Maelezo ya Huduma</span>
+                        <!-- <div class="text-sm text-slate-500">INFO_SERVICE</div> -->
+                    </div>
+                </div>
+                <!-- <div class="flex items-center gap-1.5">
+                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
+                        <i class="pi pi-cog" style="color: #2563eb;"></i>
+                    </button>
+                </div> -->
+            </div>
+            <div class="flex items-center justify-between w-full p-2 rounded-lg hover:bg-slate-50 hover-icon">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                        5
+                    </div>
+                    <div>
+                        <span class="font-semibold text-slate-800 text-lg">Kuangalia Salio</span>
+                        <!-- <div class="text-sm text-slate-500">CHECK_BALANCE</div> -->
+                    </div>
+                </div>
+                <!-- <div class="flex items-center gap-1.5">
+                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
+                        <i class="pi pi-cog" style="color: #2563eb;"></i>
+                    </button>
+                </div> -->
+            </div>
+            <div class="flex items-center justify-between w-full p-2 rounded-lg hover:bg-slate-50 hover-icon">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg bg-slate-100 text-slate-500">
+                        0
+                    </div>
+                    <div>
+                        <span class="font-semibold text-slate-800 text-lg">Kusitisha</span>
+                        <!-- <div class="text-sm text-slate-500">EXIT</div> -->
+                    </div>
+                </div>
+                <!-- <div class="flex items-center gap-1.5">
+                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
+                        <i class="pi pi-cog" style="color: #2563eb;"></i>
+                    </button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+<p-dialog header="Chỉnh sửa Service" [(visible)]="visible" [modal]="true" [style]="{width: '600px'}" [closable]="true"
+    [draggable]="true" [resizable]="false">
+
+    <div class="space-y-4">
+        <form #serviceForm="ngForm">
+            <!-- ID - Disabled -->
+            <div class="flex items-center mb-4">
+                <label class="w-32 text-sm font-semibold text-gray-700 mr-4">ID:</label>
+                <div class="flex-1">
+                    <input pInputText type="text" [(ngModel)]="editData.id" name="id" [disabled]="true"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500">
+                </div>
+            </div>
+
+            <!-- Short Code - Disabled -->
+            <div class="flex items-center mb-4">
+                <label class="w-32 text-sm font-semibold text-gray-700 mr-4">Short Code:</label>
+                <div class="flex-1">
+                    <input pInputText type="text" [(ngModel)]="editData.shortCode" name="shortCode" [disabled]="true"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500">
+                </div>
+            </div>
+
+            <!-- Display Text - Editable -->
+            <div class="flex items-center mb-4">
+                <label class="w-32 text-sm font-semibold text-gray-700 mr-4">Display Text:</label>
+                <div class="flex-1">
+                    <input pInputText type="text" [(ngModel)]="editData.displayText" name="displayText"
+                        placeholder="Nhập display text" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
+            <!-- Service Code - Editable -->
+            <div class="flex items-center mb-4">
+                <label class="w-32 text-sm font-semibold text-gray-700 mr-4">Service Code:</label>
+                <div class="flex-1">
+                    <p-dropdown id="serviceCode" [options]="bundleOffers" optionLabel="vasCode" optionValue="vasCode"
+                        class="w-full" placeholder="Select serviceCode" name="serviceCode"
+                        [(ngModel)]="editData.serviceCode">
+                    </p-dropdown>
+                </div>
+            </div>
+
+            <!-- ARPU Segment - Disabled -->
+            <div class="flex items-center mb-4">
+                <label class="w-32 text-sm font-semibold text-gray-700 mr-4">ARPU Segment:</label>
+                <div class="flex-1">
+                    <input pInputText type="text" [(ngModel)]="editData.arpuSegment" name="arpuSegment"
+                        [disabled]="true"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500">
+                </div>
+            </div>
+
+            <!-- Trigger Context - Disabled -->
+            <div class="flex items-center mb-4">
+                <label class="w-32 text-sm font-semibold text-gray-700 mr-4">Trigger Context:</label>
+                <div class="flex-1">
+                    <input pInputText type="text" [(ngModel)]="editData.triggerContext" name="triggerContext"
+                        [disabled]="true"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500">
+                </div>
+            </div>
+
+            <!-- Menu Order - Disabled -->
+            <div class="flex items-center mb-4">
+                <label class="w-32 text-sm font-semibold text-gray-700 mr-4">Menu Order:</label>
+                <div class="flex-1">
+                    <input type="number" [(ngModel)]="editData.menuOrder" name="menuOrder" [disabled]="true"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500">
+                </div>
+            </div>
+
+            <!-- Is Active - Disabled -->
+            <div class="flex items-center mb-4">
+                <label class="w-32 text-sm font-semibold text-gray-700 mr-4">Is Active:</label>
+                <div class="flex-1">
+                    <div class="flex items-center">
+                        <input type="checkbox" [(ngModel)]="editData.isActive" name="isActive" [disabled]="true"
+                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <span class="ml-2 text-sm text-gray-600">{{editData.isActive ? 'Active' : 'Inactive'}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Info - Disabled -->
+            <div class="border border-gray-300 rounded-lg p-4 mt-6">
+                <div class="flex items-center justify-between mb-3 cursor-pointer"
+                    (click)="serviceInfoExpanded = !serviceInfoExpanded">
+                    <h3 class="text-sm font-semibold text-gray-800">Service Info</h3>
+                    <i [class]="serviceInfoExpanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
+                        class="text-gray-500"></i>
+                </div>
+
+                <div *ngIf="serviceInfoExpanded" class="space-y-3">
+                    <div class="flex items-center">
+                        <label class="w-32 text-sm font-medium text-gray-600 mr-4">Amount:</label>
+                        <div class="flex-1">
+                            <input pInputText type="text" [(ngModel)]="editData.serviceInfo.amount" name="amount"
+                                [disabled]="true"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center">
+                        <label class="w-32 text-sm font-medium text-gray-600 mr-4">Fee:</label>
+                        <div class="flex-1">
+                            <input pInputText type="text" [(ngModel)]="editData.serviceInfo.fee" name="fee"
+                                [disabled]="true"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center">
+                        <label class="w-32 text-sm font-medium text-gray-600 mr-4">Service Type:</label>
+                        <div class="flex-1">
+                            <input pInputText type="text" [(ngModel)]="editData.serviceInfo.serviceType"
+                                name="serviceType" [disabled]="true"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-end space-x-3">
+            <p-button icon="pi pi-times" label="Hủy" styleClass=" p-button-secondary" (click)="onCancel()"
+                [disabled]="loading">
+            </p-button>
+            <p-button icon="pi pi-check" label="Lưu" [disabled]="!serviceForm.valid" (click)="updateUssd()"
+                [loadingIcon]="loading ? 'pi pi-spinner pi-spin' : ''" [loading]="loading" [disabled]="loading">
+            </p-button>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,141 @@
+<div class="card">
+    <div class="flex justify-between mb-6">
+        <div class="font-bold text-2xl">Quản lý gói cước</div>
+    </div>
+    <div class="mb-3">
+        <div class="flex justify-end">
+            <p-button severity="primary" label="Thêm gói cước" (onClick)="open()" />
+        </div>
+    </div>
+    <p-table #dt1 [value]="bundleOffers" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading" [rowHover]="true" [showGridlines]="true" [paginator]="true" responsiveLayout="scroll"
+        currentPageReportTemplate="Tổng cộng: {totalRecords}" [showCurrentPageReport]="true">
+        <ng-template #header>
+            <tr>
+                <th>Mã gói</th>
+                <th>Tên gói</th>
+                <th>Loại</th>
+                <th>Giá (TSH)</th>
+                <th>Lợi ích</th>
+                <th>Hiệu lực</th>
+                <th>ARPU</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-item>
+            <tr>
+                <td>{{ item.vasCode }}</td>
+                <td>{{ item.ocsOfferName }}</td>
+                <td>{{ item.offerType }}</td>
+                <td>{{ item.price | number }}</td>
+                <td>{{ item.benefitMB }} MB + {{ item.benefitMinutes }} min + {{ item.benefitSms }} SMS</td>
+                <td>{{ item.validityDays }} ngày</td>
+                <td>{{ item.targetArpuSegment }}</td>
+                <td>
+                    <p-tag [severity]="item.isActive ? 'success' : 'secondary'"
+                        [value]="item.isActive ? 'Hoạt động' : 'Không hoạt động'" />
+                </td>
+                <td style="text-align: center;">
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"
+                        (onClick)="getBundleOfferForEdit(item.vasCode)" />
+                    <p-button icon="pi pi-trash" severity="danger" class="mr-2" [rounded]="true" [outlined]="true"
+                        (onClick)="openDelete(item.vasCode)" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="9" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="9" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-dialog [header]="isEdit ? 'Chỉnh sửa gói cước' : 'Thêm mới gói cước'" [(visible)]="display"
+    [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '30vw' }" [modal]="true" class="dialog-custom">
+    <form class="grid gap-4">
+        <div class="grid gap-4">
+            <div>
+                <label for="vasCode" class="block text-sm font-medium text-gray-700 mb-1">Mã gói</label>
+                <input pInputText id="vasCode" type="text" class="w-full" name="vasCode" [(ngModel)]="offerBody.vasCode"
+                    [class.ng-dirty]="fieldErrors.vasCode" [class.ng-invalid]="fieldErrors.vasCode"
+                    placeholder="Nhập mã gói" />
+            </div>
+            <div>
+                <label for="ocsOfferName" class="block text-sm font-medium text-gray-700 mb-1">Tên gói</label>
+                <input pInputText id="ocsOfferName" type="text" class="w-full" name="ocsOfferName"
+                    [(ngModel)]="offerBody.ocsOfferName" [class.ng-dirty]="fieldErrors.ocsOfferName"
+                    [class.ng-invalid]="fieldErrors.ocsOfferName" placeholder="Nhập tên gói" />
+            </div>
+            <div>
+                <label for="offerType" class="block text-sm font-medium text-gray-700 mb-1">Loại gói</label>
+                <p-dropdown [(ngModel)]="offerBody.offerType" [options]="offerTypeOptions" optionLabel="label"
+                    optionValue="value" placeholder="Chọn loại SMS" name="offerType" class="w-full"
+                    [class.ng-dirty]="fieldErrors.offerType" [class.ng-invalid]="fieldErrors.offerType" />
+            </div>
+            <div *ngIf="offerBody.offerType === 'Voice'">
+                <label for="benefitMinutes" class="block text-sm font-medium text-gray-700 mb-1">Phút gọi ưu
+                    đãi (minute)</label>
+                <input pInputText id="benefitMinutes" type="text" class="w-full" name="benefitMinutes"
+                    [(ngModel)]="offerBody.benefitMinutes" (keypress)="onlyNumbers($event)"
+                    [class.ng-dirty]="fieldErrors.benefitMinutes" [class.ng-invalid]="fieldErrors.benefitMinutes" />
+            </div>
+            <div *ngIf="offerBody.offerType === 'Data'">
+                <label for="benefitMB" class="block text-sm font-medium text-gray-700 mb-1">Dung lượng ưu
+                    đãi (MB)</label>
+                <input pInputText id="benefitMB" type="text" class="w-full" name="benefitMB"
+                    [(ngModel)]="offerBody.benefitMB" (keypress)="onlyNumbers($event)"
+                    [class.ng-dirty]="fieldErrors.benefitMB" [class.ng-invalid]="fieldErrors.benefitMB" />
+            </div>
+            <div>
+                <label for="targetArpuSegment" class="block text-sm font-medium text-gray-700 mb-1">ARPU</label>
+                <p-dropdown [(ngModel)]="offerBody.targetArpuSegment" [options]="targetArpuSegment" optionLabel="label"
+                    optionValue="value" placeholder="Chọn loại ARPU" name="targetArpuSegment" class="w-full"
+                    [class.ng-dirty]="fieldErrors.targetArpuSegment"
+                    [class.ng-invalid]="fieldErrors.targetArpuSegment" />
+            </div>
+            <div>
+                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Giá</label>
+                <input pInputText id="price" type="text" class="w-full" name="price" [(ngModel)]="offerBody.price"
+                    (keypress)="onlyNumbers($event)" [class.ng-dirty]="fieldErrors.price"
+                    [class.ng-invalid]="fieldErrors.price" />
+            </div>
+            <div>
+                <label for="serviceFee" class="block text-sm font-medium text-gray-700 mb-1">Phí</label>
+                <input pInputText id="fixedServiceFee" type="text" class="w-full" name="fixedServiceFee"
+                    [(ngModel)]="offerBody.fixedServiceFee" (keypress)="onlyNumbers($event)"
+                    [class.ng-dirty]="fieldErrors.fixedServiceFee" [class.ng-invalid]="fieldErrors.fixedServiceFee" />
+            </div>
+            <div>
+                <label for="validityDays" class="block text-sm font-medium text-gray-700 mb-1">Số ngày hiệu lực</label>
+                <input pInputText id="validityDays" type="text" class="w-full" name="validityDays"
+                    [(ngModel)]="offerBody.validityDays" (keypress)="onlyNumbers($event)"
+                    [class.ng-dirty]="fieldErrors.validityDays" [class.ng-invalid]="fieldErrors.validityDays" />
+            </div>
+        </div>
+    </form>
+    <ng-template pTemplate="footer">
+        <p-button label="Cancel" (click)="close()" styleClass="p-button-text" [disabled]="loading">
+        </p-button>
+        <p-button label="Save" styleClass="w-full" [loading]="loading" [disabled]="loading" icon="pi pi-check"
+            [loadingIcon]="loading ? 'pi pi-spinner pi-spin' : ''" (onClick)="createBundleOffers()"></p-button>
+    </ng-template>
+</p-dialog>
+<p-dialog header="Confirmation" [(visible)]="displayDelete" [style]="{ width: '350px' }" [modal]="true">
+    <div class="flex items-center justify-center">
+        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+        <span>Are you sure you want to proceed?</span>
+    </div>
+    <ng-template #footer>
+        <p-button label="No" icon="pi pi-times" text severity="secondary" (click)="closeDelete()"
+            [disabled]="loading" />
+        <p-button label="Yes" icon="pi pi-check" severity="success" outlined autofocus (onClick)="deleteBundleOffer()"
+            [loading]="loading" [disabled]="loading" [loadingIcon]="loading ? 'pi pi-spinner pi-spin' : ''" />
+    </ng-template>
+</p-dialog>
+<p-toast />

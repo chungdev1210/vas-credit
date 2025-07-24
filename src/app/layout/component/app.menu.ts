@@ -21,42 +21,45 @@ export class AppMenu {
     ngOnInit() {
         this.model = [
             {
-                label: 'Home',
-                items: [{ label: 'Trang chủ', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
-            },
-            {
-                label: 'Pages',
+                label: 'PAGES',
                 icon: 'pi pi-fw pi-briefcase',
                 routerLink: ['/pages'],
                 items: [
+                    { label: 'Trang chủ', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
                     {
-                        label: 'Campaign',
-                        icon: 'pi pi-fw pi-chart-bar',
-                        routerLink: ['/pages/campaign']
+                        label: 'Quản lý Menu USSD',
+                        icon: 'pi pi-fw pi-sitemap',
+                        routerLink: ['/pages/ussd-management']
                     },
                     {
-                        label: 'Campaign content',
-                        icon: 'pi pi-fw pi-book',
-                        routerLink: ['/pages/campaign-content']
+                        label: 'Quản lý SMS Content',
+                        icon: 'pi pi-fw pi-comments',
+                        routerLink: ['/pages/sms-content']
                     },
                     {
-                        label: 'Partners',
-                        icon: 'pi pi-fw pi-users',
-                        routerLink: ['/pages/partners']
+                        label: 'Quản lý SMS Command',
+                        icon: 'pi pi-fw pi-expand',
+                        routerLink: ['/pages/sms-command']
                     },
                     {
-                        label: 'Black list',
-                        icon: 'pi pi-fw pi-address-book',
-                        routerLink: ['/pages/black-list']
+                        label: 'Quản lý gói cước',
+                        icon: 'pi pi-fw pi-gift',
+                        routerLink: ['/pages/offer-management']
                     }
                 ]
             },
             {
-                label: 'Get Started',
+                label: 'SYSTEM',
+                routerLink: ['/pages'],
                 items: [
                     {
-                        label: 'Documentation',
-                        icon: 'pi pi-fw pi-book',
+                        label: 'Cấu hình hệ thống',
+                        icon: 'pi pi-fw pi-cog',
+                        routerLink: ['/pages/system-configs']
+                    },
+                    {
+                        label: 'Quản trị',
+                        icon: 'pi pi-fw pi-users',
                         routerLink: ['/documentation']
                     }
                 ]

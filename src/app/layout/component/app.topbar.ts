@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-topbar',
@@ -57,14 +58,13 @@ import { LayoutService } from '../service/layout.service';
                     <!-- <button type="button" class="layout-topbar-action">
                         <i class="pi pi-calendar"></i>
                         <span>Calendar</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-inbox"></i>
-                        <span>Messages</span>
                     </button> -->
-                    <button type="button" class="layout-topbar-action" routerLink="/auth/login">
+                    <button type="button" class="layout-topbar-action">
                         <i class="pi pi-user"></i>
-                        <span>Profile</span>
+                        <!-- <span>{{ dataUser.userName }}</span> -->
+                    </button>
+                    <button type="button" class="layout-topbar-action" (click)="logout()">
+                        <i class="pi pi-sign-out"></i>
                     </button>
                 </div>
             </div>
@@ -73,10 +73,41 @@ import { LayoutService } from '../service/layout.service';
 })
 export class AppTopbar {
     items!: MenuItem[];
+    dataUser: any;
 
-    constructor(public layoutService: LayoutService) {}
+    constructor(
+        public layoutService: LayoutService,
+        private _authService: AuthService,
+        private router: Router
+    ) {}
+
+    ngOnInit() {
+        this.getToken();
+    }
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
+    }
+
+    getToken() {
+        this.dataUser = JSON.parse(localStorage.getItem('info') || '{}');
+    }
+
+    logout() {
+        this._authService.logout().subscribe({
+            next: (response: any) => {
+                localStorage.removeItem('info');
+                this.router.navigate(['auth/login']);
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });
+    }
+
+    redirectLogin() {
+        if (!this.dataUser) {
+            this.router.navigate(['auth/login']);
+        }
     }
 }

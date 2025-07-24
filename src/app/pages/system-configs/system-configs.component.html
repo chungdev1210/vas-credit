@@ -1,0 +1,69 @@
+<div class="card">
+    <div class="flex justify-between mb-6">
+        <div class="font-bold text-2xl">Cấu hình hệ thống</div>
+    </div>
+    <p-table #dt1 [value]="configLists" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+        [rowHover]="true" [showGridlines]="true" [paginator]="true" responsiveLayout="scroll">
+        <ng-template #header>
+            <tr>
+                <th>Tên dịch vụ</th>
+                <th>Phần cấu hình</th>
+                <th>Mã hóa</th>
+                <th>Trạng thái</th>
+                <th>Ghi chú</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-item>
+            <tr>
+                <td>{{ item.serviceName }}</td>
+                <td>{{ item.configSection }}</td>
+                <td>{{ item.isEncrypted ? 'Đã mã hoá' : 'Không mã hoá' }}</td>
+                <td>
+                    <p-tag [severity]="item.isActive ? 'success' : 'secondary'"
+                        [value]="item.isActive ? 'Hoạt động' : 'Không hoạt động'" />
+                </td>
+                <td>{{ item.notes }}</td>
+                <td style="text-align: center;">
+                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200"
+                        (click)="openEditDialog(item.id)">
+                        <i class="pi pi-cog" style="color: #2563eb;"></i>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-dialog [header]="'Edit: ' + currentEditingItem?.serviceName" [(visible)]="isDialogVisible" [modal]="true"
+    (onHide)="hideDialog()" [style]="{ width: '50vw' }">
+    <form [formGroup]="configForm" *ngIf="configForm">
+        <div class="p-fluid">
+            <div *ngFor="let key of formKeys" class="p-field mb-4">
+                <label [for]="key" class="font-bold block mb-2">{{ key }}</label>
+                <ng-container *ngIf="isJsonString(configForm.get(key)?.value); else defaultInput">
+                    <textarea [id]="key" pTextarea [formControlName]="key" rows="8" class="w-full"></textarea>
+                </ng-container>
+                <ng-template #defaultInput>
+                    <input [id]="key" type="text" pInputText [formControlName]="key" class="w-full" />
+                </ng-template>
+            </div>
+        </div>
+    </form>
+    <ng-template pTemplate="footer">
+        <p-button label="Cancel" (click)="hideDialog()" styleClass="p-button-text" [disabled]="loading">
+        </p-button>
+        <p-button label="Save" styleClass="w-full" (onClick)="saveChanges()" [loading]="loading" [disabled]="loading"
+            icon="pi pi-check" [loadingIcon]="loading ? 'pi pi-spinner pi-spin' : ''"></p-button>
+    </ng-template>
+</p-dialog>
+<p-toast />
