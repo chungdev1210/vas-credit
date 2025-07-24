@@ -1,13 +1,9 @@
 {
     "rewrites": [
-    {
-      "source": "/api-auth/:path*",
-      "destination": "http://10.101.52.40:9996/:path*"
-    },
-    {
-      "source": "/admin/:path*",
-      "destination": "http://10.101.52.40:9996/admin/:path*"
-    }
-  ],
+        {
+            "source": "/:path*",
+            "destination": "/index.html"
+        }
+    ],
     "trailingSlash": false
 }
