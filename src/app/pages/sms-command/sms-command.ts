@@ -114,8 +114,7 @@ export class SmsCommandComponent {
             const selectedOffer = this.bundleOffers.find((offer) => offer.vasCode === selectedValue);
             if (selectedOffer) {
                 this.smsBody.price = selectedOffer.price.toString();
-                const serviceFee = selectedOffer.fixedServiceFee;
-                this.smsBody.serviceFee = serviceFee.toString();
+                this.smsBody.serviceFee = selectedOffer.fixedServiceFee ? selectedOffer.fixedServiceFee : 0;
                 this.smsBody.offerType = this.capitalize(selectedOffer.offerType);
             }
         } else {
