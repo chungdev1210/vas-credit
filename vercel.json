@@ -1,13 +1,9 @@
 {
-  "rewrites": [
-    {
-      "source": "/api-auth/:path*",
-      "destination": "https://vas-credit.vercel.app/:path*"
-    },
-    {
-      "source": "/admin/:path*",
-      "destination": "https://vas-credit.vercel.app/admin/:path*"
-    }
-  ],
+    "rewrites": [
+        {
+            "source": "/:path*",
+            "destination": "/index.html"
+        }
+    ],
     "trailingSlash": false
 }
