@@ -45,6 +45,26 @@ export class AppMenu {
                         label: 'Quản lý gói cước',
                         icon: 'pi pi-fw pi-gift',
                         routerLink: ['/pages/offer-management']
+                    },
+                    {
+                        label: 'Báo cáo tổng hợp',
+                        icon: 'pi pi-fw pi pi-file',
+                        routerLink: ['/pages/summary-report']
+                    },
+                    {
+                        label: 'Nhật ký giao dịch',
+                        icon: 'pi pi-fw pi pi-database',
+                        routerLink: ['/pages/transaction-log']
+                    },
+                    {
+                        label: 'Quản lý số dư',
+                        icon: 'pi pi-fw pi-credit-card',
+                        routerLink: ['/pages/remaining-credit']
+                    },
+                    {
+                        label: 'Quản lý nợ xấu',
+                        icon: 'pi pi-fw pi-ban',
+                        routerLink: ['/pages/bad-debt']
                     }
                 ]
             },

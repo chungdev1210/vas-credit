@@ -1,0 +1,56 @@
+<div class="card">
+    <div class="flex justify-between mb-6">
+        <div class="font-bold text-2xl">Báo cáo tổng hợp</div>
+    </div>
+    <div class="mb-3">
+        <div class="flex justify-end gap-3">
+            <p-datepicker [(ngModel)]="fromDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay"
+                placeholder="From date" />
+            <p-datepicker [(ngModel)]="toDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay"
+                placeholder="To date" />
+            <p-button severity="secondary" icon="pi pi-search" (onClick)="reportDaily()" />
+            <p-button severity="secondary" icon="pi pi-download" (onClick)="exportReportDaily()" />
+        </div>
+    </div>
+    <p-table #dt1 [value]="dailys" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+        [rowHover]="true" [showGridlines]="true" [paginator]="true" responsiveLayout="scroll"
+        currentPageReportTemplate="Tổng cộng: {totalRecords}" [showCurrentPageReport]="true">
+        <ng-template #header>
+            <tr>
+                <th>Ngày</th>
+                <th>Đăng ký hôm nay</th>
+                <th>Huỷ hôm nay</th>
+                <th>Số tiền hoàn trả</th>
+                <th>Số tiền vay</th>
+                <th>Doanh thu (10% của số tiền hoàn trả)</th>
+                <th>Tổng số người dùng đã đăng ký</th>
+                <th>Mời hôm nay</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-item>
+            <tr>
+                <td>{{ parseDotNetDate(item.date) | date: 'MM/dd/yyyy' }}</td>
+                <td>{{ item.registeredToday | number }}</td>
+                <td>{{ item.cancelledToday | number }}</td>
+                <td>{{ item.paybackAmount | number }}</td>
+                <td>{{ item.loanAmount | number }}</td>
+                <td>{{ item.revenue | number }}</td>
+                <td>{{ item.totalRegisteredUsers | number }}</td>
+                <td>
+                    {{ item.invitedToday | number }}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="9" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="9" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-toast />

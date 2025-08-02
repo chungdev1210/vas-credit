@@ -1,0 +1,53 @@
+<div class="card">
+    <div class="flex justify-between mb-6">
+        <div class="font-bold text-2xl">Quản lý giao dịch</div>
+    </div>
+    <div class="mb-3">
+        <div class="flex justify-end gap-3">
+            <p-datepicker [(ngModel)]="fromDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay"
+                placeholder="From date" />
+            <p-datepicker [(ngModel)]="toDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay"
+                placeholder="To date" />
+            <input type="text" pInputText [(ngModel)]="msisdn" placeholder="Nhập số thuê bao" />
+            <p-button severity="secondary" icon="pi pi-search" (onClick)="getTransactions()" />
+            <p-button severity="secondary" icon="pi pi-download" (onClick)="exportTransactions()" />
+        </div>
+    </div>
+    <p-table #dt1 [value]="transactions" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading" [rowHover]="true" [showGridlines]="true" [paginator]="true" responsiveLayout="scroll"
+        currentPageReportTemplate="Tổng cộng: {totalRecords}" [showCurrentPageReport]="true">
+        <ng-template #header>
+            <tr>
+                <th>Msisdn</th>
+                <th>Data</th>
+                <th>Price</th>
+                <th>Cmd</th>
+                <th>Chanel</th>
+                <th>Status</th>
+                <th>Request time</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-item>
+            <tr>
+                <td>{{ item.msisdn }}</td>
+                <td>{{ item.data }}</td>
+                <td>{{ item.price | number }}</td>
+                <td>{{ item.cmd }}</td>
+                <td>{{ item.chanel }}</td>
+                <td>{{ item.status }}</td>
+                <td>{{ parseDotNetDate(item.requestTime) | date: 'MM/dd/yyyy' }}</td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-toast />

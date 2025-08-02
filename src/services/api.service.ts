@@ -89,6 +89,34 @@ export class ApiService {
             .pipe(catchError((error) => this.handleError(error)));
     }
 
+    downloadFile(url: string, params?: any, filename?: string): Observable<Blob> {
+        return this.http
+            .get(`${this.API_BASE}${url}`, {
+                params: params,
+                headers: this.createHeaders(),
+                responseType: 'blob'
+            })
+            .pipe(
+                tap((blob) => {
+                    if (filename) {
+                        this.saveFile(blob, filename);
+                    }
+                }),
+                catchError((error) => this.handleError(error))
+            );
+    }
+
+    private saveFile(blob: Blob, filename: string): void {
+        const downloadURL = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadURL;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadURL);
+    }
+
     private createHeaders(): HttpHeaders {
         return new HttpHeaders({
             Accept: 'application/json',

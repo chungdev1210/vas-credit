@@ -70,6 +70,10 @@ export class OfferManagementComponent {
         { label: 'ARPU_HIGH', value: 'ARPU_HIGH' },
         { label: 'ANY', value: 'ANY' }
     ];
+    activeOptions = [
+        { label: 'Hoạt động', value: true },
+        { label: 'Không hoạt động', value: false }
+    ];
     fieldErrors: any = {};
     offerBody: any = {
         vasCode: '',
@@ -204,7 +208,7 @@ export class OfferManagementComponent {
             this.fieldErrors.validityDays = true;
         }
         if (this.offerBody.fixedServiceFee === undefined) {
-            this.fieldErrors.valueFee = true;
+            this.fieldErrors.fixedServiceFee = true;
         }
     }
 
@@ -230,7 +234,15 @@ export class OfferManagementComponent {
             price: 0,
             targetArpuSegment: '',
             fixedServiceFee: 0,
-            validityDays: 0
+            validityDays: 0,
+            benefitSms: null,
+            serviceFeeRate: null,
+            mpsCategory: '',
+            mpsSubService: '',
+            mpsCode: '',
+            mpsPriceCommandValue: null,
+            isActive: true,
+            description: ''
         };
         this.display = true;
     }
@@ -247,16 +259,4 @@ export class OfferManagementComponent {
     closeDelete() {
         this.displayDelete = false;
     }
-
-    // {
-    // "vasCode": "IVAS_MN_CREDIT_3",
-    // "ocsOfferName": "Dakika 3",
-    // "offerType": "Voice",
-    // "benefitMinutes": "10",
-    // "benefitMB": 0,
-    // "price": "400",
-    // "targetArpuSegment": "ARPU_LOW",
-    // "valueFee": "10",
-    // "validityDays": "10"
-    // }
 }

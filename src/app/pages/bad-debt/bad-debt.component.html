@@ -1,0 +1,51 @@
+<div class="card">
+    <div class="flex justify-between mb-6">
+        <div class="font-bold text-2xl">Quản lý nợ xấu</div>
+    </div>
+    <div class="mb-3">
+        <div class="flex justify-end gap-3">
+            <input type="text" pInputText [(ngModel)]="msisdn" placeholder="Nhập số thuê bao" />
+            <p-datepicker [(ngModel)]="selectedDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay"
+                placeholder="Chọn ngày" />
+            <p-button severity="secondary" icon="pi pi-search" (onClick)="getBadDebt()" />
+            <p-button severity="secondary" icon="pi pi-download" (onClick)="exportRemainingCredit()" />
+        </div>
+    </div>
+    <p-table #dt1 [value]="data" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+        [rowHover]="true" [showGridlines]="true" [paginator]="true" responsiveLayout="scroll"
+        currentPageReportTemplate="Tổng cộng: {totalRecords}" [showCurrentPageReport]="true">
+        <ng-template #header>
+            <tr>
+                <th>Số thuê bao</th>
+                <th>Tên gói</th>
+                <th>Ngày/giờ vay</th>
+                <th>Ngày hoàn trả cuối</th>
+                <th>Số tiền hoàn trả cuối</th>
+                <th>Tổng số tiền vay</th>
+                <th>Số tiền tín dụng còn lại</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-item>
+            <tr>
+                <td>{{ item.msisdn }}</td>
+                <td>{{ item.packageName }}</td>
+                <td>{{ parseDotNetDate(item.loanDate) | date: 'MM/dd/yyyy' }}</td>
+                <td>{{ parseDotNetDate(item.lastPaybackDate) | date: 'MM/dd/yyyy' }}</td>
+                <td>{{ item.lastPaybackAmount | number }}</td>
+                <td>{{ item.totalLoanAmount | number }}</td>
+                <td>{{ item.remainingCreditAmount | number }}</td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-toast />
