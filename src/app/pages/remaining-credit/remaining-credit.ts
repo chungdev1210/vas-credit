@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CampaignService } from '../service/campaign.service';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -15,6 +15,7 @@ import { MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ReportService } from '../../../services/report.service';
+import { Table } from 'primeng/table';
 
 @Component({
     selector: 'app-remaining-credit',
@@ -24,6 +25,7 @@ import { ReportService } from '../../../services/report.service';
     providers: [CampaignService, MessageService, DatePipe]
 })
 export class RemainingCreditComponent {
+    @ViewChild('dt1') table!: Table;
     constructor(
         private _reportService: ReportService,
         private _messageService: MessageService,
@@ -57,9 +59,13 @@ export class RemainingCreditComponent {
     }
 
     exportremainingCredit() {
+        const skipCount = this.table.first || 0;
+        const maxResultCount = this.table.rows || 10;
         this._reportService
             .exportRemainingCredit({
-                ...(this.msisdn && { msisdn: this.msisdn })
+                ...(this.msisdn && { msisdn: this.msisdn }),
+                skipCount: skipCount,
+                maxResultCount: maxResultCount
             })
             .subscribe({
                 next: (response: any) => {

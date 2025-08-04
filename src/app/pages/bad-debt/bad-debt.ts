@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CampaignService } from '../service/campaign.service';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { CommonModule, DatePipe } from '@angular/common';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -24,6 +24,7 @@ import { ReportService } from '../../../services/report.service';
     providers: [CampaignService, MessageService, DatePipe]
 })
 export class BadDebtComponent {
+    @ViewChild('dt1') table!: Table;
     constructor(
         private _reportService: ReportService,
         private _messageService: MessageService,
@@ -62,10 +63,14 @@ export class BadDebtComponent {
             this._messageService.add({ severity: 'error', summary: 'Thông báo', detail: 'Vui lòng chọn ngày', life: 5000 });
             return;
         }
+        const skipCount = this.table.first || 0;
+        const maxResultCount = this.table.rows || 10;
         this._reportService
             .exportBadDebt({
                 ...(this.msisdn && { msisdn: this.msisdn }),
-                ...(this.selectedDate && { selectedDate: this.getFormattedDate(this.selectedDate) })
+                // ...(this.selectedDate && { selectedDate: this.getFormattedDate(this.selectedDate) }),
+                skipCount: skipCount,
+                maxResultCount: maxResultCount
             })
             .subscribe({
                 next: (response: any) => {

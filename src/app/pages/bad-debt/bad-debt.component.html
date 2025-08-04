@@ -5,8 +5,8 @@
     <div class="mb-3">
         <div class="flex justify-end gap-3">
             <input type="text" pInputText [(ngModel)]="msisdn" placeholder="Nhập số thuê bao" />
-            <p-datepicker [(ngModel)]="selectedDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay"
-                placeholder="Chọn ngày" />
+            <!-- <p-datepicker [(ngModel)]="selectedDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay"
+                placeholder="Chọn ngày" /> -->
             <p-button severity="secondary" icon="pi pi-search" (onClick)="getBadDebt()" />
             <p-button severity="secondary" icon="pi pi-download" (onClick)="exportRemainingCredit()" />
         </div>
