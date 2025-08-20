@@ -9,7 +9,7 @@
     </div>
     <p-table #dt1 [value]="smsContents" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
         [loading]="isLoading" [rowHover]="true" [showGridlines]="true" [paginator]="true" responsiveLayout="scroll"
-        currentPageReportTemplate="Tổng cộng: {totalRecords}" [showCurrentPageReport]="true">
+        currentPageReportTemplate="Total: {totalRecords}" [showCurrentPageReport]="true">
         <ng-template #header>
             <tr>
                 <th style="min-width: 12rem">Package</th>
@@ -61,14 +61,21 @@
                     <label for="offerCode" class="block text-sm font-medium text-gray-700 mb-1">Package</label>
                     <p-dropdown id="offerCode" [options]="bundleOffers" optionLabel="vasCode" optionValue="vasCode"
                         class="w-full" [class.ng-dirty]="fieldErrors.offerCode" placeholder="Select a package"
-                        [class.ng-invalid]="fieldErrors.offerCode" name="offerCode" [(ngModel)]="smsBody.offerCode">
+                        [class.ng-invalid]="fieldErrors.offerCode" name="offerCode" [(ngModel)]="smsBody.offerCode"
+                        *ngIf="packages.length === 0">
+                    </p-dropdown>
+                    <p-dropdown id="offerCode" [options]="packages" optionLabel="name" optionValue="name" class="w-full"
+                        [class.ng-dirty]="fieldErrors.offerCode" placeholder="Select a package"
+                        [class.ng-invalid]="fieldErrors.offerCode" name="offerCode" [(ngModel)]="smsBody.offerCode"
+                        *ngIf="packages.length > 0">
                     </p-dropdown>
                 </div>
                 <div>
                     <label for="messageType" class="block text-sm font-medium text-gray-700 mb-1">SMS Type</label>
-                    <p-dropdown [(ngModel)]="smsBody.messageType" [options]="messageType" optionLabel="label"
-                        optionValue="value" placeholder="Select SMS type" name="messageType" class="w-full"
-                        [class.ng-dirty]="fieldErrors.messageType" [class.ng-invalid]="fieldErrors.messageType" />
+                    <p-dropdown [(ngModel)]="smsBody.messageType" [options]="categories" optionLabel="name"
+                        optionValue="name" placeholder="Select SMS type" name="messageType" class="w-full"
+                        [class.ng-dirty]="fieldErrors.messageType" [class.ng-invalid]="fieldErrors.messageType"
+                        (onChange)="onMessageTypeChange($event)" />
                 </div>
                 <div>
                     <label for="language" class="block text-sm font-medium text-gray-700 mb-1">Language</label>

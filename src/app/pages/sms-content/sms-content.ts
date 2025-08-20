@@ -79,6 +79,9 @@ export class SmsContentComponent {
     isEdit: boolean = false;
     displayConfirmation: boolean = false;
     bundleOffers: any[] = [];
+    offerData: any[] = [];
+    packages: any[] = [];
+    categories: any[] = [];
 
     constructor(
         private _smsContentService: SmsContentService,
@@ -89,6 +92,8 @@ export class SmsContentComponent {
     ngOnInit() {
         this.getSmsContents();
         this.getBundleOffers();
+        this.getSmsCategories();
+        console.log(this.packages);
     }
 
     getSmsContents() {
@@ -110,6 +115,20 @@ export class SmsContentComponent {
             });
     }
 
+    getSmsCategories() {
+        this.isLoading = true;
+        this._smsContentService.getSmsCategories().subscribe({
+            next: (response: any) => {
+                this.categories = Object.values(response);
+                this.isLoading = false;
+            },
+            error: (error) => {
+                this.service.add({ severity: 'error', summary: 'Thông báo', detail: error.statusText, life: 10000 });
+                this.isLoading = false;
+            }
+        });
+    }
+
     parseDate(dateString: string): Date | null {
         const match = dateString.match(/\/Date\((\d+)([+-]\d{4})?\)\//);
         return match ? new Date(parseInt(match[1])) : null;
@@ -121,7 +140,14 @@ export class SmsContentComponent {
         this._smsContentService.getSmsContent(id).subscribe({
             next: (response: any) => {
                 this.smsBody = response.data;
-                // this.isActive = this.smsBody.isActive;
+                if (this.smsBody.messageType === 'LOAN_SUCCESS') {
+                    this.packages = [];
+                    this.bundleOffers = this.offerData;
+                } else {
+                    const category = this.categories.find((c) => c.name === this.smsBody.messageType);
+                    this.packages = category.subCategories;
+                }
+
                 this.display = true;
             },
             error: (error) => {
@@ -151,7 +177,7 @@ export class SmsContentComponent {
             })
             .subscribe({
                 next: (response: any) => {
-                    this.bundleOffers = response.data.items;
+                    this.offerData = response.data.items;
                 },
                 error: (error) => {
                     this.service.add({ severity: 'error', summary: 'Thông báo', detail: error.statusText, life: 10000 });
@@ -166,7 +192,6 @@ export class SmsContentComponent {
         }
         this.loading = true;
         this.smsBody.content = this.smsBody.messageContent;
-        // this.smsBody.isActive = this.isActive;
         if (!this.isEdit) {
             this._smsContentService.createSmsContent(this.smsBody).subscribe({
                 next: (response: any) => {
@@ -219,6 +244,17 @@ export class SmsContentComponent {
         }
         if (!this.smsBody.messageContent) {
             this.fieldErrors.messageContent = true;
+        }
+    }
+
+    onMessageTypeChange(event: any) {
+        const selectedName = event.value;
+        const category = this.categories.find((c) => c.name === selectedName);
+        if (selectedName !== 'LOAN_SUCCESS') {
+            this.packages = category.subCategories;
+        } else {
+            this.packages = [];
+            this.bundleOffers = this.offerData;
         }
     }
 

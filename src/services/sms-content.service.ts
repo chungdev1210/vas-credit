@@ -11,6 +11,10 @@ export class SmsContentService {
         return this.apiService.get('/cms/sms-content', { ...params });
     }
 
+    getSmsCategories(params?: any) {
+        return this.apiService.get('/cms/sms-content/categories', { ...params });
+    }
+
     getSmsContent(id: any) {
         return this.apiService.get(`/cms/sms-content/${id}`);
     }
