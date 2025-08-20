@@ -1,6 +1,6 @@
 <div class="card">
     <div class="flex justify-between mb-6">
-        <div class="font-bold text-2xl">Quản lý giao dịch</div>
+        <div class="font-bold text-2xl">Transaction logs</div>
     </div>
     <div class="mb-3">
         <div class="flex justify-end gap-3">
@@ -8,7 +8,7 @@
                 placeholder="From date" />
             <p-datepicker [(ngModel)]="toDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay"
                 placeholder="To date" />
-            <input type="text" pInputText [(ngModel)]="msisdn" placeholder="Nhập số thuê bao" />
+            <input type="text" pInputText [(ngModel)]="msisdn" placeholder="Enter phone number" />
             <p-button severity="secondary" icon="pi pi-search" (onClick)="getTransactions()" />
             <p-button severity="secondary" icon="pi pi-download" (onClick)="exportTransactions()" />
         </div>
@@ -19,7 +19,7 @@
         <ng-template #header>
             <tr>
                 <th>Msisdn</th>
-                <th>Data</th>
+                <th style="width: 500px;">Data</th>
                 <th>Price</th>
                 <th>Cmd</th>
                 <th>Chanel</th>
@@ -40,12 +40,12 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="7" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+                <td colspan="7" style="text-align: center; padding: 32px 0;">No data available.</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="7" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+                <td colspan="7" style="text-align: center; padding: 32px 0;">Please wait...</td>
             </tr>
         </ng-template>
     </p-table>

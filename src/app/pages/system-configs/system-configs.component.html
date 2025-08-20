@@ -1,16 +1,16 @@
 <div class="card">
     <div class="flex justify-between mb-6">
-        <div class="font-bold text-2xl">Cấu hình hệ thống</div>
+        <div class="font-bold text-2xl">System Configuration</div>
     </div>
     <p-table #dt1 [value]="configLists" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
         [rowHover]="true" [showGridlines]="true" [paginator]="true" responsiveLayout="scroll">
         <ng-template #header>
             <tr>
-                <th>Tên dịch vụ</th>
-                <th>Phần cấu hình</th>
-                <th>Mã hóa</th>
-                <th>Trạng thái</th>
-                <th>Ghi chú</th>
+                <th>Service Name</th>
+                <th>Configuration Section</th>
+                <th>Encryption</th>
+                <th>Status</th>
+                <th>Notes</th>
                 <th></th>
             </tr>
         </ng-template>
@@ -18,10 +18,10 @@
             <tr>
                 <td>{{ item.serviceName }}</td>
                 <td>{{ item.configSection }}</td>
-                <td>{{ item.isEncrypted ? 'Đã mã hoá' : 'Không mã hoá' }}</td>
+                <td>{{ item.isEncrypted ? 'Encrypted' : 'Not Encrypted' }}</td>
                 <td>
                     <p-tag [severity]="item.isActive ? 'success' : 'secondary'"
-                        [value]="item.isActive ? 'Hoạt động' : 'Không hoạt động'" />
+                        [value]="item.isActive ? 'Active' : 'Inactive'" />
                 </td>
                 <td>{{ item.notes }}</td>
                 <td style="text-align: center;">
@@ -34,12 +34,12 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="6" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+                <td colspan="6" style="text-align: center; padding: 32px 0;">No data available.</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="6" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+                <td colspan="6" style="text-align: center; padding: 32px 0;">Please wait...</td>
             </tr>
         </ng-template>
     </p-table>

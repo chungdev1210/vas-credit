@@ -1,10 +1,10 @@
 <div class="card">
     <div class="flex justify-between mb-6">
-        <div class="font-bold text-2xl">Quản lý gói cước</div>
+        <div class="font-bold text-2xl">Offer Management</div>
     </div>
     <div class="mb-3">
         <div class="flex justify-end">
-            <p-button severity="primary" label="Thêm gói cước" (onClick)="open()" />
+            <p-button severity="primary" label="Create offer" (onClick)="open()" />
         </div>
     </div>
     <p-table #dt1 [value]="bundleOffers" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
@@ -12,16 +12,17 @@
         currentPageReportTemplate="Tổng cộng: {totalRecords}" [showCurrentPageReport]="true">
         <ng-template #header>
             <tr>
-                <th>Mã gói</th>
-                <th>Tên gói</th>
-                <th>Loại</th>
-                <th>Giá (TSH)</th>
-                <th>Lợi ích</th>
-                <th>Hiệu lực</th>
+                <th>Offer Code</th>
+                <th>Offer Name</th>
+                <th>Type</th>
+                <th>Price (TSH)</th>
+                <th>Benefits</th>
+                <th>Validity</th>
                 <th>ARPU</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
+
         </ng-template>
         <ng-template #body let-item>
             <tr>
@@ -34,7 +35,7 @@
                 <td>{{ item.targetArpuSegment }}</td>
                 <td>
                     <p-tag [severity]="item.isActive ? 'success' : 'secondary'"
-                        [value]="item.isActive ? 'Hoạt động' : 'Không hoạt động'" />
+                        [value]="item.isActive ? 'Active' : 'Inactive'" />
                 </td>
                 <td style="text-align: center;">
                     <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"
@@ -46,121 +47,113 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="9" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+                <td colspan="9" style="text-align: center; padding: 32px 0;">No data available.</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="9" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+                <td colspan="9" style="text-align: center; padding: 32px 0;">Please wait...</td>
             </tr>
         </ng-template>
     </p-table>
 </div>
-<p-dialog [header]="isEdit ? 'Chỉnh sửa gói cước' : 'Thêm mới gói cước'" [(visible)]="display"
-    [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '30vw' }" [modal]="true" class="dialog-custom">
+<p-dialog [header]="isEdit ? 'Edit Offer' : 'Add New Offer'" [(visible)]="display" [breakpoints]="{ '960px': '75vw' }"
+    [style]="{ width: '30vw' }" [modal]="true" class="dialog-custom">
     <form class="grid gap-4">
         <div class="grid gap-4">
             <!-- Existing fields -->
             <div>
-                <label for="vasCode" class="block text-sm font-medium text-gray-700 mb-1">Mã gói</label>
+                <label for="vasCode" class="block text-sm font-medium text-gray-700 mb-1">Offer Code</label>
                 <input pInputText id="vasCode" type="text" class="w-full" name="vasCode" [(ngModel)]="offerBody.vasCode"
                     [class.ng-dirty]="fieldErrors.vasCode" [class.ng-invalid]="fieldErrors.vasCode"
-                    placeholder="Nhập mã gói" />
+                    placeholder="Enter offer code" />
             </div>
             <div>
-                <label for="ocsOfferName" class="block text-sm font-medium text-gray-700 mb-1">Tên gói</label>
+                <label for="ocsOfferName" class="block text-sm font-medium text-gray-700 mb-1">Offer Name</label>
                 <input pInputText id="ocsOfferName" type="text" class="w-full" name="ocsOfferName"
                     [(ngModel)]="offerBody.ocsOfferName" [class.ng-dirty]="fieldErrors.ocsOfferName"
-                    [class.ng-invalid]="fieldErrors.ocsOfferName" placeholder="Nhập tên gói" />
+                    [class.ng-invalid]="fieldErrors.ocsOfferName" placeholder="Enter offer name" />
             </div>
             <div>
-                <label for="offerType" class="block text-sm font-medium text-gray-700 mb-1">Loại gói</label>
+                <label for="offerType" class="block text-sm font-medium text-gray-700 mb-1">Offer Type</label>
                 <p-dropdown [(ngModel)]="offerBody.offerType" [options]="offerTypeOptions" optionLabel="label"
-                    optionValue="value" placeholder="Chọn loại gói" name="offerType" class="w-full"
+                    optionValue="value" placeholder="Select offer type" name="offerType" class="w-full"
                     [class.ng-dirty]="fieldErrors.offerType" [class.ng-invalid]="fieldErrors.offerType" />
             </div>
             <div *ngIf="offerBody.offerType === 'Voice'">
-                <label for="benefitMinutes" class="block text-sm font-medium text-gray-700 mb-1">Phút gọi ưu
-                    đãi (minute)</label>
+                <label for="benefitMinutes" class="block text-sm font-medium text-gray-700 mb-1">Bonus Minutes</label>
                 <input pInputText id="benefitMinutes" type="text" class="w-full" name="benefitMinutes"
                     [(ngModel)]="offerBody.benefitMinutes" (keypress)="onlyNumbers($event)"
                     [class.ng-dirty]="fieldErrors.benefitMinutes" [class.ng-invalid]="fieldErrors.benefitMinutes" />
             </div>
             <div *ngIf="offerBody.offerType === 'Data'">
-                <label for="benefitMB" class="block text-sm font-medium text-gray-700 mb-1">Dung lượng ưu
-                    đãi (MB)</label>
+                <label for="benefitMB" class="block text-sm font-medium text-gray-700 mb-1">Bonus Data (MB)</label>
                 <input pInputText id="benefitMB" type="text" class="w-full" name="benefitMB"
                     [(ngModel)]="offerBody.benefitMB" (keypress)="onlyNumbers($event)"
                     [class.ng-dirty]="fieldErrors.benefitMB" [class.ng-invalid]="fieldErrors.benefitMB" />
             </div>
-            <!-- <div *ngIf="offerBody.offerType === 'SMS'">
-                <label for="benefitSms" class="block text-sm font-medium text-gray-700 mb-1">Số SMS ưu đãi</label>
-                <input pInputText id="benefitSms" type="text" class="w-full" name="benefitSms"
-                    [(ngModel)]="offerBody.benefitSms" (keypress)="onlyNumbers($event)"
-                    [class.ng-dirty]="fieldErrors.benefitSms" [class.ng-invalid]="fieldErrors.benefitSms" />
-            </div> -->
             <div>
                 <label for="targetArpuSegment" class="block text-sm font-medium text-gray-700 mb-1">ARPU</label>
                 <p-dropdown [(ngModel)]="offerBody.targetArpuSegment" [options]="targetArpuSegment" optionLabel="label"
-                    optionValue="value" placeholder="Chọn loại ARPU" name="targetArpuSegment" class="w-full"
+                    optionValue="value" placeholder="Select ARPU type" name="targetArpuSegment" class="w-full"
                     [class.ng-dirty]="fieldErrors.targetArpuSegment"
                     [class.ng-invalid]="fieldErrors.targetArpuSegment" />
             </div>
             <div>
-                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Giá</label>
+                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Price</label>
                 <input pInputText id="price" type="text" class="w-full" name="price" [(ngModel)]="offerBody.price"
                     (keypress)="onlyNumbers($event)" [class.ng-dirty]="fieldErrors.price"
                     [class.ng-invalid]="fieldErrors.price" />
             </div>
             <div>
-                <label for="fixedServiceFee" class="block text-sm font-medium text-gray-700 mb-1">Phí dịch vụ</label>
+                <label for="fixedServiceFee" class="block text-sm font-medium text-gray-700 mb-1">Service Fee</label>
                 <input pInputText id="fixedServiceFee" type="text" class="w-full" name="fixedServiceFee"
                     [(ngModel)]="offerBody.fixedServiceFee" (keypress)="onlyNumbers($event)"
                     [class.ng-dirty]="fieldErrors.fixedServiceFee" [class.ng-invalid]="fieldErrors.fixedServiceFee" />
             </div>
             <div>
-                <label for="validityDays" class="block text-sm font-medium text-gray-700 mb-1">Số ngày hiệu lực</label>
+                <label for="validityDays" class="block text-sm font-medium text-gray-700 mb-1">Validity (days)</label>
                 <input pInputText id="validityDays" type="text" class="w-full" name="validityDays"
                     [(ngModel)]="offerBody.validityDays" (keypress)="onlyNumbers($event)"
                     [class.ng-dirty]="fieldErrors.validityDays" [class.ng-invalid]="fieldErrors.validityDays" />
             </div>
             <div>
-                <label for="mpsCategory" class="block text-sm font-medium text-gray-700 mb-1">Danh mục MPS</label>
+                <label for="mpsCategory" class="block text-sm font-medium text-gray-700 mb-1">MPS Category</label>
                 <input pInputText id="mpsCategory" type="text" class="w-full" name="mpsCategory"
                     [(ngModel)]="offerBody.mpsCategory" [class.ng-dirty]="fieldErrors.mpsCategory"
-                    [class.ng-invalid]="fieldErrors.mpsCategory" placeholder="Nhập danh mục MPS" />
+                    [class.ng-invalid]="fieldErrors.mpsCategory" placeholder="Enter MPS category" />
             </div>
 
             <div>
-                <label for="mpsSubService" class="block text-sm font-medium text-gray-700 mb-1">Dịch vụ phụ MPS</label>
+                <label for="mpsSubService" class="block text-sm font-medium text-gray-700 mb-1">MPS Sub-service</label>
                 <input pInputText id="mpsSubService" type="text" class="w-full" name="mpsSubService"
                     [(ngModel)]="offerBody.mpsSubService" [class.ng-dirty]="fieldErrors.mpsSubService"
-                    [class.ng-invalid]="fieldErrors.mpsSubService" placeholder="Nhập dịch vụ phụ MPS" />
+                    [class.ng-invalid]="fieldErrors.mpsSubService" placeholder="Enter MPS sub-service" />
             </div>
 
             <div>
-                <label for="mpsCode" class="block text-sm font-medium text-gray-700 mb-1">Mã MPS</label>
+                <label for="mpsCode" class="block text-sm font-medium text-gray-700 mb-1">MPS Code</label>
                 <input pInputText id="mpsCode" type="text" class="w-full" name="mpsCode" [(ngModel)]="offerBody.mpsCode"
-                    placeholder="Nhập mã MPS" />
+                    placeholder="Enter MPS code" />
             </div>
 
             <div>
-                <label for="mpsPriceCommandValue" class="block text-sm font-medium text-gray-700 mb-1">Giá trị lệnh
-                    MPS</label>
+                <label for="mpsPriceCommandValue" class="block text-sm font-medium text-gray-700 mb-1">MPS Command
+                    Value</label>
                 <input pInputText id="mpsPriceCommandValue" type="text" class="w-full" name="mpsPriceCommandValue"
-                    [(ngModel)]="offerBody.mpsPriceCommandValue" placeholder="Nhập giá trị lệnh MPS" />
+                    [(ngModel)]="offerBody.mpsPriceCommandValue" placeholder="Enter MPS command value" />
             </div>
 
             <div>
-                <label for="isActive" class="block text-sm font-medium text-gray-700 mb-1">Trạng thái hoạt động</label>
+                <label for="isActive" class="block text-sm font-medium text-gray-700 mb-1">Active Status</label>
                 <p-dropdown [(ngModel)]="offerBody.isActive" [options]="activeOptions" optionLabel="label"
-                    optionValue="value" placeholder="Chọn trạng thái" name="isActive" class="w-full" />
+                    optionValue="value" placeholder="Select status" name="isActive" class="w-full" />
             </div>
 
             <div>
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea pInputTextarea id="description" class="w-full" name="description" rows="3"
-                    [(ngModel)]="offerBody.description" placeholder="Nhập mô tả gói dịch vụ"></textarea>
+                    [(ngModel)]="offerBody.description" placeholder="Enter offer description"></textarea>
             </div>
         </div>
     </form>
@@ -171,6 +164,7 @@
             [loadingIcon]="loading ? 'pi pi-spinner pi-spin' : ''" (onClick)="createBundleOffers()"></p-button>
     </ng-template>
 </p-dialog>
+
 <p-dialog header="Confirmation" [(visible)]="displayDelete" [style]="{ width: '350px' }" [modal]="true">
     <div class="flex items-center justify-center">
         <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>

@@ -1,6 +1,6 @@
 <div class="card">
     <div class="flex justify-between mb-6">
-        <div class="font-bold text-2xl">Báo cáo tổng hợp</div>
+        <div class="font-bold text-2xl">Summary report</div>
     </div>
     <div class="mb-3">
         <div class="flex justify-end gap-3">
@@ -17,14 +17,14 @@
         currentPageReportTemplate="Tổng cộng: {totalRecords}" [showCurrentPageReport]="true">
         <ng-template #header>
             <tr>
-                <th>Ngày</th>
-                <th>Đăng ký hôm nay</th>
-                <th>Huỷ hôm nay</th>
-                <th>Số tiền hoàn trả</th>
-                <th>Số tiền vay</th>
-                <th>Doanh thu (10% của số tiền hoàn trả)</th>
-                <th>Tổng số người dùng đã đăng ký</th>
-                <th>Mời hôm nay</th>
+                <th>Date</th>
+                <th>Registrations Today</th>
+                <th>Cancellations Today</th>
+                <th>Refund Amount</th>
+                <th>Loan Amount</th>
+                <th>Revenue (10% of Refund Amount)</th>
+                <th>Total Registered Users</th>
+                <th>Invites Today</th>
             </tr>
         </ng-template>
         <ng-template #body let-item>
@@ -43,12 +43,12 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="9" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+                <td colspan="9" style="text-align: center; padding: 32px 0;">No data available.</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="9" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+                <td colspan="9" style="text-align: center; padding: 32px 0;">Please wait...</td>
             </tr>
         </ng-template>
     </p-table>

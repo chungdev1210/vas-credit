@@ -1,38 +1,15 @@
 <div class="space-y-6 p-4 md:p-6">
     <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-slate-800">Quản lý Menu USSD</h1>
-            <p class="text-slate-500">Trực quan hóa và chỉnh sửa các luồng USSD của bạn.</p>
+            <h1 class="text-3xl font-bold text-slate-800">USSD Menu Management</h1>
+            <p class="text-slate-500">Visualize and edit your USSD flows.</p>
         </div>
     </div>
     <div class="p-3 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg text-md text-blue-800">
-        <strong>Lưu ý:</strong> Chỉ có thể sửa nội dung cấp 3 (gói cước). Cấp 1 và 2 là các menu điều hướng cố định của
-        hệ thống.
+        <strong>Note:</strong> Only level 3 content (offers) can be edited. Levels 1 and 2 are fixed navigation menus of
+        the system.
     </div>
 
-    <div class="p-4 bg-white border border-slate-200 rounded-xl shadow-sm flex flex-wrap items-end gap-4">
-        <div class="relative flex-grow min-w-[250px]">
-            <label class="text-xs font-semibold text-slate-500">TÌM KIẾM</label>
-            <div class="relative mt-1">
-                <input pInputText type="text" placeholder="Tìm kiếm gói, nội dung, mã ServiceCode..." class="w-full" />
-            </div>
-        </div>
-        <div class="flex-grow min-w-[150px]">
-            <label class="text-xs font-semibold text-slate-500">LOẠI GÓI</label>
-            <p-dropdown styleClass="w-full mt-1" [options]="['Tất cả loại', 'Vay tiền', 'Data']"
-                placeholder="Tất cả loại"></p-dropdown>
-        </div>
-        <div class="flex-grow min-w-[150px]">
-            <label class="text-xs font-semibold text-slate-500">PHÂN KHÚC</label>
-            <p-dropdown styleClass="w-full mt-1" [options]="['Tất cả khách hàng', 'Khách thường', 'Khách VIP']"
-                placeholder="Tất cả khách hàng"></p-dropdown>
-        </div>
-        <div class="flex-grow min-w-[150px]">
-            <label class="text-xs font-semibold text-slate-500">TRẠNG THÁI</label>
-            <p-dropdown styleClass="w-full mt-1" [options]="['Tất cả', 'Đang hoạt động', 'Đã tắt']"
-                placeholder="Tất cả"></p-dropdown>
-        </div>
-    </div>
 
     <div class="bg-white border border-slate-200/80 rounded-xl shadow-md mt-6 p-4 space-y-2">
         <div class="flex items-center justify-between w-full p-2 rounded-lg">
@@ -42,7 +19,7 @@
                     <i class="pi pi-crown" style="font-size: 1rem; color: green"></i>
                 </div>
                 <div>
-                    <span class="font-semibold text-slate-800">Menu Chính - Karibu HALO SALIO</span>
+                    <span class="font-semibold text-slate-800">Main menu - Karibu HALO SALIO</span>
                     <div class="text-md text-slate-500">*149*14#</div>
                 </div>
             </div>
@@ -56,22 +33,16 @@
                     </div>
                     <div>
                         <span class="font-semibold text-slate-800 text-lg">{{package1.categoryName}}</span>
-                        <!-- <div class="text-sm text-slate-500">NAVIGATE_TO_BALANCE</div> -->
                     </div>
                 </div>
-                <!-- <div class="flex items-center gap-1.5">
-                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
-                        <i class="pi pi-cog" style="color: #2563eb;"></i>
-                    </button>
-                </div> -->
             </div>
             <div class="customer-plans-container">
                 <p-accordion [multiple]="true">
-                    <p-accordionTab header="Khách hàng thường (Low ARPU)">
+                    <p-accordionTab header="Standard Customer (Low ARPU)">
                         <ng-template pTemplate="header">
                             <div class="accordion-header">
                                 <i class="pi pi-users" style="margin-right: 8px;"></i>
-                                <span>Khách hàng thường (Low ARPU)</span>
+                                <span>Standard Customer (Low ARPU)</span>
                             </div>
                         </ng-template>
                         <div class="plans-list">
@@ -110,11 +81,11 @@
                     </p-accordionTab>
                 </p-accordion>
                 <p-accordion [multiple]="true">
-                    <p-accordionTab header="Khách hàng VIP (High ARPU)">
+                    <p-accordionTab header="VIP Customer (High ARPU)">
                         <ng-template pTemplate="header">
                             <div class="accordion-header">
                                 <i class="pi pi-star" style="margin-right: 8px;"></i>
-                                <span>Khách hàng VIP (High ARPU)</span>
+                                <span>VIP Customer (High ARPU)</span>
                             </div>
                         </ng-template>
                         <div class="plans-list">
@@ -137,7 +108,6 @@
                                                 <span class="pr-2">
                                                     {{ plan.serviceCode }} - {{ plan.displayText }}
                                                 </span>
-                                                <!-- <span class="pl-2">💎 VIP (High ARPU)</span> -->
                                             </div>
                                         </div>
                                     </div>
@@ -162,22 +132,16 @@
                     </div>
                     <div>
                         <span class="font-semibold text-slate-800 text-lg">{{package2.categoryName}}</span>
-                        <!-- <div class="text-sm text-slate-500">NAVIGATE_TO_BALANCE</div> -->
                     </div>
                 </div>
-                <!-- <div class="flex items-center gap-1.5">
-                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
-                        <i class="pi pi-cog" style="color: #2563eb;"></i>
-                    </button>
-                </div> -->
             </div>
             <div class="customer-plans-container">
                 <p-accordion [multiple]="true">
-                    <p-accordionTab header="Khách hàng thường (Low ARPU)">
+                    <p-accordionTab header="Standard Customer (Low ARPU)">
                         <ng-template pTemplate="header">
                             <div class="accordion-header">
                                 <i class="pi pi-users" style="margin-right: 8px;"></i>
-                                <span>Khách hàng thường (Low ARPU)</span>
+                                <span>Standard Customer (Low ARPU)</span>
                             </div>
                         </ng-template>
                         <div class="plans-list">
@@ -216,11 +180,11 @@
                     </p-accordionTab>
                 </p-accordion>
                 <p-accordion [multiple]="true">
-                    <p-accordionTab header="Khách hàng VIP (High ARPU)">
+                    <p-accordionTab header="VIP Customer (High ARPU)">
                         <ng-template pTemplate="header">
                             <div class="accordion-header">
                                 <i class="pi pi-star" style="margin-right: 8px;"></i>
-                                <span>Khách hàng VIP (High ARPU)</span>
+                                <span>VIP Customer (High ARPU)</span>
                             </div>
                         </ng-template>
                         <div class="plans-list">
@@ -243,7 +207,6 @@
                                                 <span class="pr-2">
                                                     {{ plan.serviceCode }} - {{ plan.displayText }}
                                                 </span>
-                                                <!-- <span class="pl-2">💎 VIP (High ARPU)</span> -->
                                             </div>
                                         </div>
                                     </div>
@@ -268,22 +231,16 @@
                     </div>
                     <div>
                         <span class="font-semibold text-slate-800 text-lg">{{package3.categoryName}}</span>
-                        <!-- <div class="text-sm text-slate-500">NAVIGATE_TO_BALANCE</div> -->
                     </div>
                 </div>
-                <!-- <div class="flex items-center gap-1.5">
-                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
-                        <i class="pi pi-cog" style="color: #2563eb;"></i>
-                    </button>
-                </div> -->
             </div>
             <div class="customer-plans-container">
                 <p-accordion [multiple]="true">
-                    <p-accordionTab header="Khách hàng thường (Low ARPU)">
+                    <p-accordionTab header="Standard Customer (Low ARPU)">
                         <ng-template pTemplate="header">
                             <div class="accordion-header">
                                 <i class="pi pi-users" style="margin-right: 8px;"></i>
-                                <span>Khách hàng thường (Low ARPU)</span>
+                                <span>Standard Customer (Low ARPU)</span>
                             </div>
                         </ng-template>
                         <div class="plans-list">
@@ -322,11 +279,11 @@
                     </p-accordionTab>
                 </p-accordion>
                 <p-accordion [multiple]="true">
-                    <p-accordionTab header="Khách hàng VIP (High ARPU)">
+                    <p-accordionTab header="VIP Customer (High ARPU)">
                         <ng-template pTemplate="header">
                             <div class="accordion-header">
                                 <i class="pi pi-star" style="margin-right: 8px;"></i>
-                                <span>Khách hàng VIP (High ARPU)</span>
+                                <span>VIP Customer (High ARPU)</span>
                             </div>
                         </ng-template>
                         <div class="plans-list">
@@ -349,7 +306,6 @@
                                                 <span class="pr-2">
                                                     {{ plan.serviceCode }} - {{ plan.displayText }}
                                                 </span>
-                                                <!-- <span class="pl-2">💎 VIP (High ARPU)</span> -->
                                             </div>
                                         </div>
                                     </div>
@@ -374,14 +330,8 @@
                     </div>
                     <div>
                         <span class="font-semibold text-slate-800 text-lg">Maelezo ya Huduma</span>
-                        <!-- <div class="text-sm text-slate-500">INFO_SERVICE</div> -->
                     </div>
                 </div>
-                <!-- <div class="flex items-center gap-1.5">
-                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
-                        <i class="pi pi-cog" style="color: #2563eb;"></i>
-                    </button>
-                </div> -->
             </div>
             <div class="flex items-center justify-between w-full p-2 rounded-lg hover:bg-slate-50 hover-icon">
                 <div class="flex items-center gap-4">
@@ -391,14 +341,8 @@
                     </div>
                     <div>
                         <span class="font-semibold text-slate-800 text-lg">Kuangalia Salio</span>
-                        <!-- <div class="text-sm text-slate-500">CHECK_BALANCE</div> -->
                     </div>
                 </div>
-                <!-- <div class="flex items-center gap-1.5">
-                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
-                        <i class="pi pi-cog" style="color: #2563eb;"></i>
-                    </button>
-                </div> -->
             </div>
             <div class="flex items-center justify-between w-full p-2 rounded-lg hover:bg-slate-50 hover-icon">
                 <div class="flex items-center gap-4">
@@ -408,19 +352,13 @@
                     </div>
                     <div>
                         <span class="font-semibold text-slate-800 text-lg">Kusitisha</span>
-                        <!-- <div class="text-sm text-slate-500">EXIT</div> -->
                     </div>
                 </div>
-                <!-- <div class="flex items-center gap-1.5">
-                    <button class="py-2 px-3 rounded-md hover:bg-slate-200 text-slate-500 border border-slate-200">
-                        <i class="pi pi-cog" style="color: #2563eb;"></i>
-                    </button>
-                </div> -->
             </div>
         </div>
     </div>
 </div>
-<p-dialog header="Chỉnh sửa Service" [(visible)]="visible" [modal]="true" [style]="{width: '600px'}" [closable]="true"
+<p-dialog header="Edit Service" [(visible)]="visible" [modal]="true" [style]="{width: '600px'}" [closable]="true"
     [draggable]="true" [resizable]="false">
 
     <div class="space-y-4">

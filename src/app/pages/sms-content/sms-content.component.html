@@ -1,10 +1,10 @@
 <div class="card">
     <div class="flex justify-between mb-6">
-        <div class="font-bold text-2xl">Quản lý nội dung SMS</div>
+        <div class="font-bold text-2xl">SMS Content Management</div>
     </div>
     <div class="mb-3">
         <div class="flex justify-end">
-            <p-button severity="primary" label="Tạo nội dung" (onClick)="open()" />
+            <p-button severity="primary" label="Create content" (onClick)="open()" />
         </div>
     </div>
     <p-table #dt1 [value]="smsContents" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
@@ -12,14 +12,15 @@
         currentPageReportTemplate="Tổng cộng: {totalRecords}" [showCurrentPageReport]="true">
         <ng-template #header>
             <tr>
-                <th style="min-width: 12rem">Gói cước</th>
-                <th style="min-width: 12rem">Loại</th>
-                <th style="min-width: 12rem">Ngôn ngữ</th>
-                <th style="min-width: 12rem">Nội dung</th>
-                <th style="min-width: 12rem">Trạng thái</th>
-                <th style="min-width: 12rem">Ngày tạo</th>
-                <th style="width: 120px">Hành động</th>
+                <th style="min-width: 12rem">Package</th>
+                <th style="min-width: 12rem">Type</th>
+                <th style="min-width: 12rem">Language</th>
+                <th style="min-width: 12rem">Content</th>
+                <th style="min-width: 12rem">Status</th>
+                <th style="min-width: 12rem">Created Date</th>
+                <th style="width: 120px">Actions</th>
             </tr>
+
         </ng-template>
         <ng-template #body let-item>
             <tr>
@@ -29,7 +30,7 @@
                 <td>{{ item.messageContent }}</td>
                 <td>
                     <p-tag [severity]="item.isActive ? 'success' : 'secondary'"
-                        [value]="item.isActive ? 'Hoạt động' : 'Không hoạt động'" />
+                        [value]="item.isActive ? 'Active' : 'Inactive'" />
                 </td>
                 <td>{{ parseDate(item.createdAt) | date: 'MM/dd/yyyy' }}</td>
                 <td style="text-align: center;">
@@ -42,37 +43,38 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="7" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+                <td colspan="7" style="text-align: center; padding: 32px 0;">No data available.</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="7" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+                <td colspan="7" style="text-align: center; padding: 32px 0;">Please wait...</td>
             </tr>
         </ng-template>
+
     </p-table>
-    <p-dialog [header]="isEdit ? 'Chỉnh sửa nội dung SMS' : 'Tạo mới nội dung SMS'" [(visible)]="display"
+    <p-dialog [header]="isEdit ? 'Edit SMS Content' : 'Create New SMS Content'" [(visible)]="display"
         [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '30vw' }" [modal]="true" class="dialog-custom">
         <form class="grid gap-4">
             <div class="grid gap-4">
                 <div>
-                    <label for="offerCode" class="block text-sm font-medium text-gray-700 mb-1">Gói cước</label>
+                    <label for="offerCode" class="block text-sm font-medium text-gray-700 mb-1">Package</label>
                     <p-dropdown id="offerCode" [options]="bundleOffers" optionLabel="vasCode" optionValue="vasCode"
-                        class="w-full" [class.ng-dirty]="fieldErrors.offerCode" placeholder="Chọn gói cước"
+                        class="w-full" [class.ng-dirty]="fieldErrors.offerCode" placeholder="Select a package"
                         [class.ng-invalid]="fieldErrors.offerCode" name="offerCode" [(ngModel)]="smsBody.offerCode">
                     </p-dropdown>
                 </div>
                 <div>
-                    <label for="messageType" class="block text-sm font-medium text-gray-700 mb-1">Loại SMS</label>
+                    <label for="messageType" class="block text-sm font-medium text-gray-700 mb-1">SMS Type</label>
                     <p-dropdown [(ngModel)]="smsBody.messageType" [options]="messageType" optionLabel="label"
-                        optionValue="value" placeholder="Chọn loại SMS" name="messageType" class="w-full"
+                        optionValue="value" placeholder="Select SMS type" name="messageType" class="w-full"
                         [class.ng-dirty]="fieldErrors.messageType" [class.ng-invalid]="fieldErrors.messageType" />
                 </div>
                 <div>
-                    <label for="language" class="block text-sm font-medium text-gray-700 mb-1">Ngôn ngữ</label>
+                    <label for="language" class="block text-sm font-medium text-gray-700 mb-1">Language</label>
                     <p-dropdown id="language" [options]="languageOptions" optionLabel="label" optionValue="value"
                         class="w-full" [class.ng-dirty]="fieldErrors.language" [class.ng-invalid]="fieldErrors.language"
-                        name="language" placeholder="Chọn ngôn ngữ" [(ngModel)]="smsBody.language">
+                        name="language" placeholder="Select language" [(ngModel)]="smsBody.language">
                     </p-dropdown>
                 </div>
                 <div>
@@ -82,15 +84,15 @@
                         [class.ng-dirty]="fieldErrors.shortCode" [class.ng-invalid]="fieldErrors.shortCode" />
                 </div>
                 <div>
-                    <label for="messageContent" class="block text-sm font-medium text-gray-700 mb-1">Nội dung</label>
+                    <label for="messageContent" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
                     <textarea pTextarea placeholder="Write content..." [autoResize]="true" rows="3" cols="30"
                         name="messageContent" class="w-full" [class.ng-dirty]="fieldErrors.messageContent"
                         [class.ng-invalid]="fieldErrors.messageContent" [(ngModel)]="smsBody.messageContent"></textarea>
                 </div>
                 <!-- <div>
-                    <label for="isActive" class="block text-sm font-medium text-gray-700 mb-1">Kích hoạt</label>
-                    <p-toggleswitch [(ngModel)]="isActive" name="isActive" />
-                </div> -->
+                <label for="isActive" class="block text-sm font-medium text-gray-700 mb-1">Activate</label>
+                <p-toggleswitch [(ngModel)]="isActive" name="isActive" />
+            </div> -->
             </div>
         </form>
         <ng-template pTemplate="footer">
@@ -100,6 +102,7 @@
                 [loadingIcon]="loading ? 'pi pi-spinner pi-spin' : ''" (onClick)="createSmsContent()"></p-button>
         </ng-template>
     </p-dialog>
+
 </div>
 <p-dialog header="Confirmation" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
     <div class="flex items-center justify-center">

@@ -25,44 +25,44 @@ export class AppMenu {
                 icon: 'pi pi-fw pi-briefcase',
                 routerLink: ['/pages'],
                 items: [
-                    { label: 'Trang chủ', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                    { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
                     {
-                        label: 'Quản lý Menu USSD',
+                        label: 'USSD Menu',
                         icon: 'pi pi-fw pi-sitemap',
                         routerLink: ['/pages/ussd-management']
                     },
                     {
-                        label: 'Quản lý SMS Content',
+                        label: 'SMS Content',
                         icon: 'pi pi-fw pi-comments',
                         routerLink: ['/pages/sms-content']
                     },
                     {
-                        label: 'Quản lý SMS Command',
+                        label: 'SMS Command',
                         icon: 'pi pi-fw pi-expand',
                         routerLink: ['/pages/sms-command']
                     },
                     {
-                        label: 'Quản lý gói cước',
+                        label: 'Offer Management',
                         icon: 'pi pi-fw pi-gift',
                         routerLink: ['/pages/offer-management']
                     },
                     {
-                        label: 'Báo cáo tổng hợp',
-                        icon: 'pi pi-fw pi pi-file',
+                        label: 'Summary Report',
+                        icon: 'pi pi-fw pi-file',
                         routerLink: ['/pages/summary-report']
                     },
                     {
-                        label: 'Nhật ký giao dịch',
-                        icon: 'pi pi-fw pi pi-database',
+                        label: 'Transaction Log',
+                        icon: 'pi pi-fw pi-database',
                         routerLink: ['/pages/transaction-log']
                     },
                     {
-                        label: 'Quản lý số dư',
+                        label: 'Balance Management',
                         icon: 'pi pi-fw pi-credit-card',
                         routerLink: ['/pages/remaining-credit']
                     },
                     {
-                        label: 'Quản lý nợ xấu',
+                        label: 'Bad Debt Management',
                         icon: 'pi pi-fw pi-ban',
                         routerLink: ['/pages/bad-debt']
                     }
@@ -73,12 +73,12 @@ export class AppMenu {
                 routerLink: ['/pages'],
                 items: [
                     {
-                        label: 'Cấu hình hệ thống',
+                        label: 'System Configuration',
                         icon: 'pi pi-fw pi-cog',
                         routerLink: ['/pages/system-configs']
                     },
                     {
-                        label: 'Quản trị',
+                        label: 'Administration',
                         icon: 'pi pi-fw pi-users',
                         routerLink: ['/documentation']
                     }

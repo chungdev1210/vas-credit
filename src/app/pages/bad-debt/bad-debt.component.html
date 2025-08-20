@@ -1,10 +1,10 @@
 <div class="card">
     <div class="flex justify-between mb-6">
-        <div class="font-bold text-2xl">Quản lý nợ xấu</div>
+        <div class="font-bold text-2xl">Bad debt management</div>
     </div>
     <div class="mb-3">
         <div class="flex justify-end gap-3">
-            <input type="text" pInputText [(ngModel)]="msisdn" placeholder="Nhập số thuê bao" />
+            <input type="text" pInputText [(ngModel)]="msisdn" placeholder="Enter phone number" />
             <!-- <p-datepicker [(ngModel)]="selectedDate" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay"
                 placeholder="Chọn ngày" /> -->
             <p-button severity="secondary" icon="pi pi-search" (onClick)="getBadDebt()" />
@@ -16,13 +16,13 @@
         currentPageReportTemplate="Tổng cộng: {totalRecords}" [showCurrentPageReport]="true">
         <ng-template #header>
             <tr>
-                <th>Số thuê bao</th>
-                <th>Tên gói</th>
-                <th>Ngày/giờ vay</th>
-                <th>Ngày hoàn trả cuối</th>
-                <th>Số tiền hoàn trả cuối</th>
-                <th>Tổng số tiền vay</th>
-                <th>Số tiền tín dụng còn lại</th>
+                <th>Subscriber Number</th>
+                <th>Offer Name</th>
+                <th>Loan Date/Time</th>
+                <th>Last Repayment Date</th>
+                <th>Last Repayment Amount</th>
+                <th>Total Loan Amount</th>
+                <th>Remaining Credit Amount</th>
             </tr>
         </ng-template>
         <ng-template #body let-item>
@@ -38,12 +38,12 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="7" style="text-align: center; padding: 32px 0;">Không có dữ liệu.</td>
+                <td colspan="7" style="text-align: center; padding: 32px 0;">No data available.</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="7" style="text-align: center; padding: 32px 0;">Vui lòng chờ...</td>
+                <td colspan="7" style="text-align: center; padding: 32px 0;">Please wait...</td>
             </tr>
         </ng-template>
     </p-table>

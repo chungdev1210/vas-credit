@@ -71,8 +71,8 @@ export class OfferManagementComponent {
         { label: 'ANY', value: 'ANY' }
     ];
     activeOptions = [
-        { label: 'Hoạt động', value: true },
-        { label: 'Không hoạt động', value: false }
+        { label: 'Active', value: true },
+        { label: 'Inactive', value: false }
     ];
     fieldErrors: any = {};
     offerBody: any = {
