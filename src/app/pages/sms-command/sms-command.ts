@@ -130,7 +130,7 @@ export class SmsCommandComponent {
         this._smsCommandsService.getSmsCommand(id).subscribe({
             next: (response: any) => {
                 this.smsBody = response.data;
-                this.smsBody.offerType = this.capitalize(this.smsBody.offerType);
+                if (this.smsBody.offerType) this.smsBody.offerType = this.capitalize(this.smsBody.offerType);
                 this.isActive = this.smsBody.isActive;
                 this.display = true;
             },
@@ -173,6 +173,7 @@ export class SmsCommandComponent {
 
     createSmsCommand() {
         this.validateForm();
+        console.log(this.fieldErrors);
         if (Object.keys(this.fieldErrors).length > 0) {
             return;
         }
@@ -232,7 +233,7 @@ export class SmsCommandComponent {
         if (!this.smsBody.offerType) {
             this.fieldErrors.offerType = true;
         }
-        if (!this.smsBody.serviceFee) {
+        if (!this.smsBody.serviceFee && this.smsBody.serviceFee < 0) {
             this.fieldErrors.serviceFee = true;
         }
         if (!this.smsBody.price) {
